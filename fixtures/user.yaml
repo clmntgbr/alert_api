@@ -1,0 +1,14 @@
+App\Entity\User:
+  user_1:
+    id: 1
+    email: "clement@gmail.com"
+    plain_password: "clement"
+    roles: ["ROLE_ADMIN"]
+    is_enable: true
+
+  user_2:
+    id: 2
+    email: "jean@gmail.com"
+    plain_password: "jean"
+    roles: ["ROLE_USER"]
+    is_enable: true
