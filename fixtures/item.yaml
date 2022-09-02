@@ -1,0 +1,6 @@
+App\Entity\Item:
+  item_{1..100}:
+    product: '@product_*'
+    store: '@store_*'
+
+  

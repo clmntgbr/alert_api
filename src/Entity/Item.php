@@ -2,27 +2,51 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\ItemRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Hautelook\AliceBundle\Functional\TestBundle\Entity\Prod;
+use Gedmo\Blameable\Traits\BlameableEntity;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ItemRepository::class)]
 #[ApiResource(
-    collectionOperations: ['get', 'post'],
-    itemOperations: ['get', 'delete', 'put'],
+    collectionOperations: [
+        'get' => ['normalization_context' => ['skip_null_values' => false, 'groups' => ['read_items']]], 
+        'post'
+    ],
+    itemOperations: [
+        'get' => ['normalization_context' => ['skip_null_values' => false, 'groups' => ['read_item']]], 
+        'delete', 
+        'put'
+    ],
+)]
+#[ApiFilter(
+    SearchFilter::class, properties: [
+    'id' => 'exact', 'store.id' => 'exact']
+)]
+#[ApiFilter(
+    BooleanFilter::class, properties: [
+        'store.isActive'
+    ]
 )]
 class Item
 {
+    use TimestampableEntity;
+    use BlameableEntity;
+
     #[ORM\Id, ORM\GeneratedValue, ORM\Column]
+    #[Groups(['read_item', 'read_items'])]
     private ?int $id = null;
     
     #[ORM\ManyToOne(targetEntity: Product::class, fetch: 'EXTRA_LAZY')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['read_item', 'read_items'])]
     private Product $product;
     
-    #[ORM\ManyToOne(targetEntity: Store::class, fetch: 'EXTRA_LAZY', inversedBy: 'items')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\ManyToOne(targetEntity: Store::class, fetch: 'EAGER', inversedBy: 'items')]
     private Store $store;
 
     public function getId(): ?int

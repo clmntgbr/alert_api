@@ -1,0 +1,8 @@
+App\Entity\Product:
+  product_{1..1000}:
+    ean: <ean13()>
+    name: <sentence(2)>
+    brand: <sentence(2)>
+    country: <country()>
+    nutrition: '@nutrition_<current()>'
+

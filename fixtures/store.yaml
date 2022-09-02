@@ -1,0 +1,14 @@
+App\Entity\Store:
+  store_1:
+    name: <sentence(2)>
+    user: '@user_1'
+    isActive: true
+  store_2:
+    name: <sentence(2)>
+    user: '@user_2'
+    isActive: true
+  store_{3..10}:
+    name: <sentence(2)>
+    user: '@user_*'
+    isActive: false
+

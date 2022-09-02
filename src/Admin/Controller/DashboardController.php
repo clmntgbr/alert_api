@@ -2,6 +2,10 @@
 
 namespace App\Admin\Controller;
 
+use App\Entity\Item;
+use App\Entity\Nutrition;
+use App\Entity\Product;
+use App\Entity\Store;
 use App\Entity\User;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
@@ -35,6 +39,10 @@ class DashboardController extends AbstractDashboardController
     {
         yield MenuItem::linkToDashboard('Dashboard', 'fa fa-home');
         yield MenuItem::linkToUrl('Api Docs', 'fas fa-map-marker-alt', '/api/docs');
+        yield MenuItem::linkToCrud('Item', 'fas fa-list', Item::class);
+        yield MenuItem::linkToCrud('Nutrition', 'fas fa-list', Nutrition::class);
+        yield MenuItem::linkToCrud('Product', 'fas fa-list', Product::class);
+        yield MenuItem::linkToCrud('Store', 'fas fa-list', Store::class);
         yield MenuItem::linkToCrud('User', 'fas fa-list', User::class);
     }
 }
