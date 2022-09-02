@@ -12,7 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource(
-    collectionOperations: ['get'], // TEMPORARY
+    collectionOperations: [], // TEMPORARY
     itemOperations: ['get'],
 )]
 class Product
