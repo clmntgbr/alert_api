@@ -8,6 +8,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: NutritionRepository::class)]
 #[ApiResource(
@@ -18,33 +19,40 @@ class Nutrition
 {
     use TimestampableEntity;
     use BlameableEntity;
-    
+
     #[ORM\Id, ORM\GeneratedValue, ORM\Column]
+    #[Groups(['read_item'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['read_item'])]
     private ?string $ecoscoreGrade;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['read_item'])]
     private ?string $ecoscoreScore;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['read_item'])]
     private ?string $ingredientsText;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['read_item'])]
     private ?string $nutriscoreGrade;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['read_item'])]
     private ?string $nutriscoreScore;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['read_item'])]
     private ?string $quantity;
 
     public function __toString()
     {
         return (string) $this->id;
     }
-    
+
     public function getId(): ?int
     {
         return $this->id;

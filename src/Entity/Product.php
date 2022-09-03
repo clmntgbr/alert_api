@@ -9,22 +9,28 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Vich\UploaderBundle\Entity\File as EmbeddedFile;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource(
-    collectionOperations: [], // TEMPORARY
+    collectionOperations: [],
     itemOperations: ['get'],
 )]
+#[Vich\Uploadable]
 class Product
 {
     use TimestampableEntity;
     use BlameableEntity;
-    
+
     #[ORM\Id, ORM\GeneratedValue, ORM\Column]
     #[Groups(['read_item', 'read_items'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, unique: true)]
+    #[Groups(['read_item'])]
     private string $ean;
 
     #[ORM\Column(type: Types::STRING)]
@@ -37,14 +43,37 @@ class Product
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
     #[Groups(['read_item', 'read_items'])]
-    private ?string $country;
-
-    #[ORM\Column(type: Types::STRING, nullable: true)]
     private ?string $categories;
-    
+
     #[ORM\ManyToOne(targetEntity: Nutrition::class, cascade: ['persist', 'remove'], fetch: 'LAZY')]
+    #[Groups(['read_item'])]
     private Nutrition $nutrition;
-    
+
+    #[Vich\UploadableField(mapping: 'product_image', fileNameProperty:'image.name', size:'image.size', mimeType:'image.mimeType', originalName:'image.originalName', dimensions:'image.dimensions')]
+    private ?File $imageFile = null;
+
+    #[ORM\Embedded(class:'Vich\UploaderBundle\Entity\File')]
+    private EmbeddedFile $image;
+
+    #[Vich\UploadableField(mapping: 'product_image', fileNameProperty:'imageIngredients.name', size:'imageIngredients.size', mimeType:'imageIngredients.mimeType', originalName:'imageIngredients.originalName', dimensions:'imageIngredients.dimensions')]
+    private ?File $imageIngredientsFile = null;
+
+    #[ORM\Embedded(class:'Vich\UploaderBundle\Entity\File')]
+    private EmbeddedFile $imageIngredients;
+
+    #[Vich\UploadableField(mapping: 'product_image', fileNameProperty:'imageNutrition.name', size:'imageNutrition.size', mimeType:'imageNutrition.mimeType', originalName:'imageNutrition.originalName', dimensions:'imageNutrition.dimensions')]
+    private ?File $imageNutritionFile = null;
+
+    #[ORM\Embedded(class:'Vich\UploaderBundle\Entity\File')]
+    private EmbeddedFile $imageNutrition;
+
+    public function __construct()
+    {
+        $this->image = new \Vich\UploaderBundle\Entity\File();
+        $this->imageIngredients = new \Vich\UploaderBundle\Entity\File();
+        $this->imageNutrition = new \Vich\UploaderBundle\Entity\File();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -86,14 +115,110 @@ class Product
         return $this;
     }
 
-    public function getCountry(): ?string
+    public function getNutrition(): ?Nutrition
     {
-        return $this->country;
+        return $this->nutrition;
     }
 
-    public function setCountry(?string $country): self
+    public function setNutrition(?Nutrition $nutrition): self
     {
-        $this->country = $country;
+        $this->nutrition = $nutrition;
+
+        return $this;
+    }
+
+    #[Groups(['read_item', 'read_items'])]
+    public function getImagePath()
+    {
+        return sprintf('/images/products/%s', $this->getImage()->getName());
+    }
+
+    #[Groups(['read_item'])]
+    public function getImageIngredientsPath()
+    {
+        return sprintf('/images/products/%s', $this->getImageIngredients()->getName());
+    }
+
+    #[Groups(['read_item'])]
+    public function getImageNutritionPath()
+    {
+        return sprintf('/images/products/%s', $this->getImageNutrition()->getName());
+    }
+
+    public function getImage(): EmbeddedFile
+    {
+        return $this->image;
+    }
+
+    public function setImage(EmbeddedFile $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function setImageFile(?File $imageFile = null)
+    {
+        $this->imageFile = $imageFile;
+
+        if (null !== $imageFile) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function setImageIngredientsFile(?File $imageFile = null)
+    {
+        $this->imageIngredientsFile = $imageFile;
+
+        if (null !== $imageFile) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getImageIngredientsFile(): ?File
+    {
+        return $this->imageIngredientsFile;
+    }
+
+    public function setImageNutritionFile(?File $imageFile = null)
+    {
+        $this->imageNutritionFile = $imageFile;
+
+        if (null !== $imageFile) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getImageNutritionFile(): ?File
+    {
+        return $this->imageNutritionFile;
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function getImageIngredients(): EmbeddedFile
+    {
+        return $this->imageIngredients;
+    }
+
+    public function setImageIngredients(EmbeddedFile $imageIngredients): self
+    {
+        $this->imageIngredients = $imageIngredients;
+
+        return $this;
+    }
+
+    public function getImageNutrition(): EmbeddedFile
+    {
+        return $this->imageNutrition;
+    }
+
+    public function setImageNutrition(EmbeddedFile $imageNutrition): self
+    {
+        $this->imageNutrition = $imageNutrition;
 
         return $this;
     }
@@ -106,18 +231,6 @@ class Product
     public function setCategories(?string $categories): self
     {
         $this->categories = $categories;
-
-        return $this;
-    }
-
-    public function getNutrition(): ?Nutrition
-    {
-        return $this->nutrition;
-    }
-
-    public function setNutrition(?Nutrition $nutrition): self
-    {
-        $this->nutrition = $nutrition;
 
         return $this;
     }

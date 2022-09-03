@@ -30,11 +30,11 @@ class Store
 {
     use TimestampableEntity;
     use BlameableEntity;
-    
+
     #[ORM\Id, ORM\GeneratedValue, ORM\Column]
     #[Groups('read_store')]
     private ?int $id = null;
-    
+
     #[ORM\Column(type: Types::STRING)]
     #[Groups('read_store', 'write_store')]
     private string $name;
