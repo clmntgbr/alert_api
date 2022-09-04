@@ -49,7 +49,7 @@ class OpenFoodFactApiService
         $product = new Product();
         $product
             ->setEan($this->response['code'])
-            ->setName($this->response['product']['product_name_fr'] ?? $this->response['product']['product_name'])
+            ->setName($this->getProductName())
             ->setBrand($this->response['product']['brands'])
             ->setCategories($this->getCategories())
             ->setNutrition($nutrition)
@@ -91,5 +91,22 @@ class OpenFoodFactApiService
         }
 
         return [];
+    }
+
+    private function getProductName(): string
+    {
+        if (array_key_exists('product_name_fr_imported', $this->response['product'])) {
+            return ucwords(strtolower(trim($this->response['product']['product_name_fr_imported'])));
+        }
+        
+        if (array_key_exists('product_name_fr', $this->response['product'])) {
+            return ucwords(strtolower(trim($this->response['product']['product_name_fr'])));
+        }
+        
+        if (array_key_exists('product_name', $this->response['product'])) {
+            return ucwords(strtolower(trim($this->response['product']['product_name'])));
+        }
+        
+        throw new HttpException(404, 'product not found.');
     }
 }

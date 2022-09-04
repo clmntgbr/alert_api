@@ -80,6 +80,7 @@ class Product
 
     public function __construct()
     {
+        $this->categories = [];
         $this->image = new \Vich\UploaderBundle\Entity\File();
         $this->imageIngredients = new \Vich\UploaderBundle\Entity\File();
         $this->imageNutrition = new \Vich\UploaderBundle\Entity\File();
@@ -234,7 +235,7 @@ class Product
         return $this;
     }
 
-    public function getCategories(): array
+    public function getCategories(): ?array
     {
         return $this->categories;
     }
