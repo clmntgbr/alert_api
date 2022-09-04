@@ -32,7 +32,7 @@ class Nutrition
     #[Groups(['read_item'])]
     private ?string $ecoscoreScore;
 
-    #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['read_item'])]
     private ?string $ingredientsText;
 

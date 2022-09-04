@@ -12,12 +12,23 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Vich\UploaderBundle\Entity\File as EmbeddedFile;
 use Symfony\Component\HttpFoundation\File\File;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+use App\Api\Controller\GetProductByEan;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource(
     collectionOperations: [],
-    itemOperations: ['get'],
+    itemOperations: [
+        'get' => ['normalization_context' => ['skip_null_values' => false, 'groups' => ['read_product']]],
+        'get_product_by_ean' => [
+            'method' => 'GET',
+            'path' => '/product/{ean}/ean',
+            'controller' => GetProductByEan::class,
+            'pagination_enabled' => false,
+            'deserialize' => false,
+            'read' => false,
+            'normalization_context' => ['skip_null_values' => false, 'groups' => ['read_product']]
+        ]
+    ],
 )]
 #[Vich\Uploadable]
 class Product
@@ -26,24 +37,24 @@ class Product
     use BlameableEntity;
 
     #[ORM\Id, ORM\GeneratedValue, ORM\Column]
-    #[Groups(['read_item', 'read_items'])]
+    #[Groups(['read_item', 'read_items', 'read_product'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, unique: true)]
-    #[Groups(['read_item'])]
+    #[Groups(['read_item', 'read_product'])]
     private string $ean;
 
     #[ORM\Column(type: Types::STRING)]
-    #[Groups(['read_item', 'read_items'])]
+    #[Groups(['read_item', 'read_items', 'read_product'])]
     private string $name;
 
     #[ORM\Column(type: Types::STRING)]
-    #[Groups(['read_item', 'read_items'])]
+    #[Groups(['read_item', 'read_items', 'read_product'])]
     private string $brand;
 
-    #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['read_item', 'read_items'])]
-    private ?string $categories;
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    #[Groups(['read_item', 'read_items', 'read_product'])]
+    private ?array $categories;
 
     #[ORM\ManyToOne(targetEntity: Nutrition::class, cascade: ['persist', 'remove'], fetch: 'LAZY')]
     #[Groups(['read_item'])]
@@ -127,7 +138,7 @@ class Product
         return $this;
     }
 
-    #[Groups(['read_item', 'read_items'])]
+    #[Groups(['read_item', 'read_items', 'read_product'])]
     public function getImagePath()
     {
         return sprintf('/images/products/%s', $this->getImage()->getName());
@@ -223,12 +234,12 @@ class Product
         return $this;
     }
 
-    public function getCategories(): ?string
+    public function getCategories(): array
     {
         return $this->categories;
     }
 
-    public function setCategories(?string $categories): self
+    public function setCategories(?array $categories): self
     {
         $this->categories = $categories;
 

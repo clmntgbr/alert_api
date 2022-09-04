@@ -37,6 +37,7 @@
         "symfony/validator": "6.1.*",
         "symfony/webpack-encore-bundle": "^1.15",
         "symfony/yaml": "6.1.*",
+        "thecodingmachine/safe": "^2.2",
         "vich/uploader-bundle": "^1.21"
     },
     "require-dev": {
