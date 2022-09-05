@@ -54,7 +54,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['read_user'])]
     private bool $isEnable;
 
-    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Store::class, cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Store::class, cascade: ['persist', 'remove'])]
     #[Groups(['read_user'])]
     private Collection $stores;
 

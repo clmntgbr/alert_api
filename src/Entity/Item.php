@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 #[ApiResource(
     collectionOperations: [
         'get' => ['normalization_context' => ['skip_null_values' => false, 'groups' => ['read_items']]],
-        'post'
+        'post' => ['denormalization_context' => ['groups' => ['post_item']]],
     ],
     itemOperations: [
         'get' => ['normalization_context' => ['skip_null_values' => false, 'groups' => ['read_item']]],
@@ -48,12 +48,12 @@ class Item
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    #[Groups(['read_item', 'read_items'])]
+    #[Groups(['read_item', 'read_items', 'post_item'])]
     #[Context([DateTimeNormalizer::FORMAT_KEY => 'd/m/Y'])]
     private ?\DateTimeInterface $expirationDate;
 
     #[ORM\ManyToOne(targetEntity: Product::class, fetch: 'EXTRA_LAZY')]
-    #[Groups(['read_item', 'read_items'])]
+    #[Groups(['read_item', 'read_items', 'post_item'])]
     private Product $product;
 
     #[ORM\ManyToOne(targetEntity: Store::class, fetch: 'EAGER', inversedBy: 'items')]

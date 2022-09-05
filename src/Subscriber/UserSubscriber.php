@@ -2,6 +2,7 @@
 
 namespace App\Subscriber;
 
+use App\Entity\Store;
 use App\Entity\User;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
@@ -39,6 +40,15 @@ class UserSubscriber implements EventSubscriber
             ->setIsEnable(true)
             ->eraseCredentials()
         ;
+
+        if ($user->getStores()->count() == 0) {
+            $store = new Store();
+            $store
+                ->setIsActive(true)
+                ->setName('Default')
+                ->setUser($user);
+            $user->addStore($store);
+        }
     }
 
     public function preUpdate(LifecycleEventArgs $args): void

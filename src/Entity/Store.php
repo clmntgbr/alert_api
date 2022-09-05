@@ -54,6 +54,11 @@ class Store
         $this->items = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return sprintf('%s - %s', $this->id, $this->name);
+    }
+
     public function getId(): ?int
     {
         return $this->id;

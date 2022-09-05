@@ -17,9 +17,10 @@ class ItemCrudController extends AbstractCrudController
     public function configureFields(string $pageName): iterable
     {
         return [
-            Field::new('id'),
+            Field::new('id')->setDisabled(true),
             AssociationField::new('product'),
             AssociationField::new('store'),
+            Field::new('expirationDate'),
         ];
     }
 }
