@@ -23,6 +23,7 @@ class ItemSubscriber implements EventSubscriber
     {
         return [
             Events::prePersist,
+            Events::preUpdate,
         ];
     }
 
@@ -41,5 +42,18 @@ class ItemSubscriber implements EventSubscriber
         $store = $this->storeRepository->findOneBy(['isActive' => true]);
 
         $item->setStore($store);
+    }
+
+    public function preUpdate(LifecycleEventArgs $args): void
+    {
+        $item = $args->getObject();
+
+        if (!$item instanceof Item) {
+            return;
+        }
+
+        if ($item->getExpirationDate()->format('Y-m-d') <= (new DateTime('now'))->format('Y-m-d')) {
+            $item->setExpirationDate(null);
+        }
     }
 }
