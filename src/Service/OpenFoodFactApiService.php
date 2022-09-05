@@ -76,21 +76,21 @@ class OpenFoodFactApiService
         return $product;
     }
 
-    private function getCategories(): array
+    private function getCategories(): ?string
     {
         if (array_key_exists('categories_imported', $this->response['product'])) {
-            return explode(',', $this->response['product']['categories_imported']);
+            return $this->response['product']['categories_imported'];
         }
         
         if (array_key_exists('categories_old', $this->response['product'])) {
-            return explode(',', $this->response['product']['categories_old']);
+            return $this->response['product']['categories_old'];
         }
         
         if (array_key_exists('categories', $this->response['product'])) {
-            return explode(',', $this->response['product']['categories']);
+            return $this->response['product']['categories'];
         }
 
-        return [];
+        return null;
     }
 
     private function getProductName(): string

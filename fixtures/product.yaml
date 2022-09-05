@@ -3,6 +3,7 @@ App\Entity\Product:
     ean: '3017620425035'
     brand: 'Ferrero'
     name: 'Pâte à tartiner Nutella noisettes et cacao - 1kg'
+    categories: 'snack, chocolat'
     nutrition: '@nutrition_1'
     image.name: '62dc40bc23dae511387391.jpg'
     image.originalName: '62dc40bc23dae511387391.jpg'
@@ -23,6 +24,7 @@ App\Entity\Product:
   product_2:
     ean: '8000500310427'
     brand: 'Nutella'  
+    categories: 'snack, chocolat'
     name: 'Biscuits Nutella Biscuits x22 biscuits fourrés - 304g'
     nutrition: '@nutrition_2'
     image.name: '62dc40d321c8b809318808.jpg'
@@ -44,6 +46,7 @@ App\Entity\Product:
   product_3:
     ean: '3229820129488'
     brand: 'Bjorg'
+    categories: 'snack, chocolat'
     name: 'Muesli Raisin, Figue, Abricot'
     nutrition: '@nutrition_3'
     image.name: '62dc40de2dd32850154612.jpg'

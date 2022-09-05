@@ -53,9 +53,9 @@ class Product
     #[Groups(['read_item', 'read_items', 'read_product'])]
     private string $brand;
 
-    #[ORM\Column(type: Types::JSON, nullable: true)]
-    #[Groups(['read_item', 'read_items'])]
-    private ?array $categories;
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['read_item', 'read_items', 'read_product'])]
+    private ?string $categories;
 
     #[ORM\ManyToOne(targetEntity: Nutrition::class, cascade: ['persist', 'remove'], fetch: 'LAZY')]
     #[Groups(['read_item'])]
@@ -84,14 +84,6 @@ class Product
         $this->image = new \Vich\UploaderBundle\Entity\File();
         $this->imageIngredients = new \Vich\UploaderBundle\Entity\File();
         $this->imageNutrition = new \Vich\UploaderBundle\Entity\File();
-    }
-
-    
-    #[Groups(['read_item', 'read_items', 'read_product'])]
-    #[SerializedName('categories')]
-    public function getCategoriesApi()
-    {
-        return implode(',', $this->categories);
     }
 
     public function getId(): ?int
@@ -243,12 +235,12 @@ class Product
         return $this;
     }
 
-    public function getCategories(): ?array
+    public function getCategories(): ?string
     {
         return $this->categories;
     }
 
-    public function setCategories(?array $categories): self
+    public function setCategories(?string $categories): self
     {
         $this->categories = $categories;
 

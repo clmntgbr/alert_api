@@ -28,7 +28,7 @@ class ProductCrudController extends AbstractCrudController
             TextField::new('ean'),
             TextField::new('name'),
             TextField::new('brand'),
-            ArrayField::new('categories'),
+            TextField::new('categories'),
 
             FormField::addPanel('Nutritions Details'),
             AssociationField::new('nutrition')->hideOnIndex(),
