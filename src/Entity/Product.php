@@ -13,6 +13,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Vich\UploaderBundle\Entity\File as EmbeddedFile;
 use Symfony\Component\HttpFoundation\File\File;
 use App\Api\Controller\GetProductByEan;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource(
@@ -53,7 +54,7 @@ class Product
     private string $brand;
 
     #[ORM\Column(type: Types::JSON, nullable: true)]
-    #[Groups(['read_item', 'read_items', 'read_product'])]
+    #[Groups(['read_item', 'read_items'])]
     private ?array $categories;
 
     #[ORM\ManyToOne(targetEntity: Nutrition::class, cascade: ['persist', 'remove'], fetch: 'LAZY')]
@@ -80,10 +81,17 @@ class Product
 
     public function __construct()
     {
-        $this->categories = [];
         $this->image = new \Vich\UploaderBundle\Entity\File();
         $this->imageIngredients = new \Vich\UploaderBundle\Entity\File();
         $this->imageNutrition = new \Vich\UploaderBundle\Entity\File();
+    }
+
+    
+    #[Groups(['read_item', 'read_items', 'read_product'])]
+    #[SerializedName('categories')]
+    public function getCategoriesApi()
+    {
+        return implode(',', $this->categories);
     }
 
     public function getId(): ?int
