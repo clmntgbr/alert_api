@@ -70,7 +70,6 @@ RUN find /tmp -type d -exec chmod -v 1777 {} +
 #USER www-data
 
 COPY assets assets
-
 COPY bin bin
 COPY templates templates
 COPY translations translations

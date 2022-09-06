@@ -8,11 +8,13 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\Security;
 
 class UserSubscriber implements EventSubscriber
 {
     public function __construct(
-        private UserPasswordHasherInterface $userPasswordHasher
+        private UserPasswordHasherInterface $userPasswordHasher,
+        private Security $security
     ) {
     }
 
@@ -38,17 +40,18 @@ class UserSubscriber implements EventSubscriber
 
         $user
             ->setIsEnable(true)
-            ->eraseCredentials()
-        ;
+            ->eraseCredentials();
 
-        if ($user->getStores()->count() == 0) {
-            $store = new Store();
-            $store
-                ->setIsActive(true)
-                ->setName('Default')
-                ->setUser($user);
-            $user->addStore($store);
+        if (!$this->security->getToken()?->getUser() instanceof User) {
+            return;
         }
+
+        $store = new Store();
+        $store
+            ->setIsActive(true)
+            ->setName('Défaut')
+            ->setUser($user);
+        $user->addStore($store);
     }
 
     public function preUpdate(LifecycleEventArgs $args): void

@@ -3,6 +3,7 @@
 namespace App\Subscriber;
 
 use App\Entity\Item;
+use App\Entity\Store;
 use App\Entity\User;
 use App\Repository\ItemRepository;
 use App\Repository\StoreRepository;
@@ -10,7 +11,7 @@ use DateTime;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\Security;
 
 class ItemSubscriber implements EventSubscriber
 {
@@ -38,10 +39,12 @@ class ItemSubscriber implements EventSubscriber
         if ($item->getExpirationDate()->format('Y-m-d') <= (new DateTime('now'))->format('Y-m-d')) {
             $item->setExpirationDate(null);
         }
-        
+
         $store = $this->storeRepository->findOneBy(['isActive' => true]);
 
-        $item->setStore($store);
+        if ($store instanceof Store) {
+            $item->setStore($store);
+        }
     }
 
     public function preUpdate(LifecycleEventArgs $args): void
