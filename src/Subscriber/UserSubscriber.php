@@ -40,8 +40,7 @@ class UserSubscriber implements EventSubscriber
 
         $user
             ->setIsEnable(true)
-            ->eraseCredentials()
-        ;
+            ->eraseCredentials();
 
         if (!$this->security->getToken()?->getUser() instanceof User) {
             return;

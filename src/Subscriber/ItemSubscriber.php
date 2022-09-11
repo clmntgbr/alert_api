@@ -3,6 +3,7 @@
 namespace App\Subscriber;
 
 use App\Entity\Item;
+use App\Entity\Store;
 use App\Entity\User;
 use App\Repository\ItemRepository;
 use App\Repository\StoreRepository;
@@ -40,10 +41,12 @@ class ItemSubscriber implements EventSubscriber
         if (!$this->security->getToken()?->getUser() instanceof User) {
             return;
         }
-        
+
         $store = $this->storeRepository->findOneBy(['isActive' => true]);
 
-        $item->setStore($store);
+        if ($store instanceof Store) {
+            $item->setStore($store);
+        }
     }
 
     public function preUpdate(LifecycleEventArgs $args): void
