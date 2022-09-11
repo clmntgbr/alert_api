@@ -25,6 +25,7 @@ class ProductCrudController extends AbstractCrudController
         return [
             FormField::addPanel('Product Details'),
             IdField::new('id')->setDisabled(true),
+            AssociationField::new('productStatus'),
             TextField::new('ean'),
             TextField::new('name'),
             TextField::new('brand'),

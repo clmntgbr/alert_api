@@ -1,31 +1,37 @@
 parameters:
-    hostname: '%env(HOSTNAME)%'
+  hostname: "%env(HOSTNAME)%"
+  maxItemPerStore: "%env(MAX_ITEM_PER_STORE)%"
 
 services:
   _defaults:
     autowire: true
     autoconfigure: true
     bind:
-        $hostname: '%hostname%'
+      $hostname: "%hostname%"
+      $maxItemPerStore: "%maxItemPerStore%"
 
   App\:
-    resource: '../src/'
+    resource: "../src/"
     exclude:
-      - '../src/DependencyInjection/'
-      - '../src/Entity/'
-      - '../src/Kernel.php'
+      - "../src/DependencyInjection/"
+      - "../src/Entity/"
+      - "../src/Kernel.php"
 
   App\Api\Controller\:
-      resource: '../src/Api/Controller/'
-      tags: [ 'controller.service_arguments' ]
+    resource: "../src/Api/Controller/"
+    tags: ["controller.service_arguments"]
 
   App\Decorator\JwtDecorator:
-      decorates: 'api_platform.openapi.factory'
+    decorates: "api_platform.openapi.factory"
 
   App\Subscriber\UserSubscriber:
     tags:
       - { name: doctrine.event_subscriber, connection: default }
 
   App\Subscriber\ItemSubscriber:
+    tags:
+      - { name: doctrine.event_subscriber, connection: default }
+
+  App\Subscriber\StoreSubscriber:
     tags:
       - { name: doctrine.event_subscriber, connection: default }

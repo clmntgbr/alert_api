@@ -2,7 +2,10 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
+use App\Api\Controller\GetActiveStore;
 use App\Repository\StoreRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -15,8 +18,24 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 
 #[ORM\Entity(repositoryClass: StoreRepository::class)]
 #[ApiResource(
-    collectionOperations: ['get', 'post'],
-    itemOperations: ['get', 'delete', 'put'],
+    collectionOperations: [
+        'get', 
+        'get_active_store' => [
+            'method' => 'GET',
+            'path' => '/store/active',
+            'controller' => GetActiveStore::class,
+            'pagination_enabled' => false,
+            'deserialize' => false,
+            'read' => false,
+            'normalization_context' => ['skip_null_values' => false, 'groups' => ['read_store']]
+        ],
+        'post'
+    ],
+    itemOperations: [
+        'get', 
+        'delete', 
+        'put'
+    ],
     normalizationContext: [
         'skip_null_values' => false,
         'groups' => ['read_store'],
@@ -42,6 +61,10 @@ class Store
     #[ORM\Column(type: Types::BOOLEAN)]
     #[Groups('read_store', 'write_store')]
     private bool $isActive;
+
+    #[ORM\Column(type: Types::INTEGER)]
+    #[Groups('read_store')]
+    private int $maxItemPerStore;
 
     #[ORM\ManyToOne(targetEntity: User::class, fetch: 'EAGER', inversedBy: 'stores')]
     private User $user;
@@ -95,6 +118,21 @@ class Store
         return $this->getItems()->count();
     }
 
+    #[SerializedName('itemsExpiredInStore')]
+    #[Groups('read_store')]
+    public function getCountExpiredItems(): int
+    {
+        $date = new \DateTime('now');
+        
+        $items = $this->getItems()->filter(
+            function(Item $item) use ($date) {
+                return $item->getExpirationDate()->format('Y-m-d') < $date->format('Y-m-d');
+             }
+        );
+
+        return $items->count();
+    }
+
     public function getUser(): ?User
     {
         return $this->user;
@@ -133,6 +171,18 @@ class Store
                 $item->setStore(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getMaxItemPerStore(): ?int
+    {
+        return $this->maxItemPerStore;
+    }
+
+    public function setMaxItemPerStore(int $maxItemPerStore): self
+    {
+        $this->maxItemPerStore = $maxItemPerStore;
 
         return $this;
     }

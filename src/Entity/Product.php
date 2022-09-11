@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ProductRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Blameable\Traits\BlameableEntity;
@@ -13,7 +15,6 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Vich\UploaderBundle\Entity\File as EmbeddedFile;
 use Symfony\Component\HttpFoundation\File\File;
 use App\Api\Controller\GetProductByEan;
-use Symfony\Component\Serializer\Annotation\SerializedName;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource(
@@ -45,11 +46,11 @@ class Product
     #[Groups(['read_item', 'read_product'])]
     private string $ean;
 
-    #[ORM\Column(type: Types::STRING)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     #[Groups(['read_item', 'read_items', 'read_product'])]
     private string $name;
 
-    #[ORM\Column(type: Types::STRING)]
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     #[Groups(['read_item', 'read_items', 'read_product'])]
     private string $brand;
 
@@ -79,11 +80,18 @@ class Product
     #[ORM\Embedded(class:'Vich\UploaderBundle\Entity\File')]
     private EmbeddedFile $imageNutrition;
 
+    #[ORM\ManyToOne(targetEntity: ProductStatus::class, cascade: ['persist']), ORM\JoinColumn(nullable: true)]
+    private ProductStatus $productStatus;
+
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductStatusHistory::class, cascade: ['remove'])]
+    private Collection $productStatusHistories;
+
     public function __construct()
     {
-        $this->image = new \Vich\UploaderBundle\Entity\File();
-        $this->imageIngredients = new \Vich\UploaderBundle\Entity\File();
-        $this->imageNutrition = new \Vich\UploaderBundle\Entity\File();
+        $this->image = new EmbeddedFile();
+        $this->imageIngredients = new EmbeddedFile();
+        $this->imageNutrition = new EmbeddedFile();
+        $this->productStatusHistories = new ArrayCollection();
     }
 
     public function __toString()
@@ -248,6 +256,39 @@ class Product
     public function setCategories(?string $categories): self
     {
         $this->categories = $categories;
+
+        return $this;
+    }
+    public function getProductStatus(): ?ProductStatus
+    {
+        return $this->productStatus;
+    }
+
+    public function setProductStatus(?ProductStatus $productStatus): self
+    {
+        $this->productStatus = $productStatus;
+
+        return $this;
+    }
+
+    public function addProductStatusHistory(ProductStatusHistory $productStatusHistory): self
+    {
+        if (!$this->productStatusHistories->contains($productStatusHistory)) {
+            $this->productStatusHistories->add($productStatusHistory);
+            $productStatusHistory->setProduct($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductStatusHistory(ProductStatusHistory $productStatusHistory): self
+    {
+        if ($this->productStatusHistories->removeElement($productStatusHistory)) {
+            // set the owning side to null (unless already changed)
+            if ($productStatusHistory->getProduct() === $this) {
+                $productStatusHistory->setProduct(null);
+            }
+        }
 
         return $this;
     }

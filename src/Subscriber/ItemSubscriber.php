@@ -11,11 +11,13 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\Security;
 
 class ItemSubscriber implements EventSubscriber
 {
     public function __construct(
-        private StoreRepository $storeRepository
+        private StoreRepository $storeRepository,
+        private Security $security
     ) {
     }
 
@@ -35,8 +37,8 @@ class ItemSubscriber implements EventSubscriber
             return;
         }
 
-        if ($item->getExpirationDate()->format('Y-m-d') <= (new DateTime('now'))->format('Y-m-d')) {
-            $item->setExpirationDate(null);
+        if (!$this->security->getToken()?->getUser() instanceof User) {
+            return;
         }
         
         $store = $this->storeRepository->findOneBy(['isActive' => true]);
@@ -52,8 +54,8 @@ class ItemSubscriber implements EventSubscriber
             return;
         }
 
-        if ($item->getExpirationDate()->format('Y-m-d') <= (new DateTime('now'))->format('Y-m-d')) {
-            $item->setExpirationDate(null);
+        if (!$this->security->getToken()?->getUser() instanceof User) {
+            return;
         }
     }
 }

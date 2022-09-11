@@ -1,0 +1,12 @@
+App\Entity\ProductStatus:
+  status_product_waiting_validation:
+    reference: '<(App\Lists\ProductStatusReference::WAITING_VALIDATION)>'
+    label: "Waiting for validation"
+
+  status_product_validated:
+    reference: '<(App\Lists\ProductStatusReference::VALIDATED)>'
+    label: "Validated"
+
+  status_product_not_found:
+    reference: '<(App\Lists\ProductStatusReference::NOT_FOUND)>'
+    label: "Not Found"
