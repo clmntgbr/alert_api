@@ -14,12 +14,32 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Annotation\Context;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
+use App\Api\Controller\GetItemsExpireSoonLimited;
+use App\Api\Controller\GetItemsExpiredLimited;
 
 #[ORM\Entity(repositoryClass: ItemRepository::class)]
 #[ApiResource(
     collectionOperations: [
         'get' => ['normalization_context' => ['skip_null_values' => false, 'groups' => ['read_items']]],
         'post' => ['denormalization_context' => ['groups' => ['post_item']]],
+        'get_items_by_expiration_date_soon_limited' => [
+            'method' => 'GET',
+            'path' => '/items/expire_soon/limited',
+            'controller' => GetItemsExpireSoonLimited::class,
+            'pagination_enabled' => false,
+            'deserialize' => false,
+            'read' => false,
+            'normalization_context' => ['skip_null_values' => false, 'groups' => ['read_items']]
+        ],
+        'get_items_by_expiration_date_limited' => [
+            'method' => 'GET',
+            'path' => '/items/expired/limited',
+            'controller' => GetItemsExpiredLimited::class,
+            'pagination_enabled' => false,
+            'deserialize' => false,
+            'read' => false,
+            'normalization_context' => ['skip_null_values' => false, 'groups' => ['read_items']]
+        ]
     ],
     itemOperations: [
         'get' => ['normalization_context' => ['skip_null_values' => false, 'groups' => ['read_item']]],

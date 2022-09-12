@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Item;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use App\Entity\Store;
 
 /**
  * @extends ServiceEntityRepository<Item>
@@ -39,20 +40,45 @@ class ItemRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return Item[] Returns an array of Item objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('i')
-//            ->andWhere('i.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('i.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @return Item[]
+     */
+    public function findItemsExpireSoon(int $limit, Store $store): array
+    {
+        $date = new \DateTime('now');
+        
+        return $this->createQueryBuilder('i')
+            ->where('i.store = :store ')
+            ->andWhere('i.expirationDate is not null')
+            ->andWhere('i.expirationDate >= :date')
+            ->setParameter('date', $date)
+            ->setParameter('store', $store)
+            ->orderBy('i.expirationDate', 'ASC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    /**
+     * @return Item[]
+     */
+    public function findItemsExpired(int $limit, Store $store): array
+    {
+        $date = new \DateTime('now');
+        
+        return $this->createQueryBuilder('i')
+            ->where('i.store = :store ')
+            ->andWhere('i.expirationDate is not null')
+            ->andWhere('i.expirationDate < :date')
+            ->setParameter('date', $date)
+            ->setParameter('store', $store)
+            ->orderBy('i.expirationDate', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
 //    public function findOneBySomeField($value): ?Item
 //    {
