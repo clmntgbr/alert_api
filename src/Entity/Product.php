@@ -62,22 +62,22 @@ class Product
     #[Groups(['read_item'])]
     private Nutrition $nutrition;
 
-    #[Vich\UploadableField(mapping: 'product_image', fileNameProperty:'image.name', size:'image.size', mimeType:'image.mimeType', originalName:'image.originalName', dimensions:'image.dimensions')]
+    #[Vich\UploadableField(mapping: 'product_image', fileNameProperty: 'image.name', size: 'image.size', mimeType: 'image.mimeType', originalName: 'image.originalName', dimensions: 'image.dimensions')]
     private ?File $imageFile = null;
 
-    #[ORM\Embedded(class:'Vich\UploaderBundle\Entity\File')]
+    #[ORM\Embedded(class: 'Vich\UploaderBundle\Entity\File')]
     private EmbeddedFile $image;
 
-    #[Vich\UploadableField(mapping: 'product_image', fileNameProperty:'imageIngredients.name', size:'imageIngredients.size', mimeType:'imageIngredients.mimeType', originalName:'imageIngredients.originalName', dimensions:'imageIngredients.dimensions')]
+    #[Vich\UploadableField(mapping: 'product_image', fileNameProperty: 'imageIngredients.name', size: 'imageIngredients.size', mimeType: 'imageIngredients.mimeType', originalName: 'imageIngredients.originalName', dimensions: 'imageIngredients.dimensions')]
     private ?File $imageIngredientsFile = null;
 
-    #[ORM\Embedded(class:'Vich\UploaderBundle\Entity\File')]
+    #[ORM\Embedded(class: 'Vich\UploaderBundle\Entity\File')]
     private EmbeddedFile $imageIngredients;
 
-    #[Vich\UploadableField(mapping: 'product_image', fileNameProperty:'imageNutrition.name', size:'imageNutrition.size', mimeType:'imageNutrition.mimeType', originalName:'imageNutrition.originalName', dimensions:'imageNutrition.dimensions')]
+    #[Vich\UploadableField(mapping: 'product_image', fileNameProperty: 'imageNutrition.name', size: 'imageNutrition.size', mimeType: 'imageNutrition.mimeType', originalName: 'imageNutrition.originalName', dimensions: 'imageNutrition.dimensions')]
     private ?File $imageNutritionFile = null;
 
-    #[ORM\Embedded(class:'Vich\UploaderBundle\Entity\File')]
+    #[ORM\Embedded(class: 'Vich\UploaderBundle\Entity\File')]
     private EmbeddedFile $imageNutrition;
 
     #[ORM\ManyToOne(targetEntity: ProductStatus::class, cascade: ['persist']), ORM\JoinColumn(nullable: true)]
@@ -182,13 +182,9 @@ class Product
         return $this;
     }
 
-    public function setImageFile(?File $imageFile = null)
+    public function getImageIngredientsFile(): ?File
     {
-        $this->imageFile = $imageFile;
-
-        if (null !== $imageFile) {
-            $this->updatedAt = new \DateTimeImmutable();
-        }
+        return $this->imageIngredientsFile;
     }
 
     public function setImageIngredientsFile(?File $imageFile = null)
@@ -200,9 +196,9 @@ class Product
         }
     }
 
-    public function getImageIngredientsFile(): ?File
+    public function getImageNutritionFile(): ?File
     {
-        return $this->imageIngredientsFile;
+        return $this->imageNutritionFile;
     }
 
     public function setImageNutritionFile(?File $imageFile = null)
@@ -214,14 +210,18 @@ class Product
         }
     }
 
-    public function getImageNutritionFile(): ?File
-    {
-        return $this->imageNutritionFile;
-    }
-
     public function getImageFile(): ?File
     {
         return $this->imageFile;
+    }
+
+    public function setImageFile(?File $imageFile = null)
+    {
+        $this->imageFile = $imageFile;
+
+        if (null !== $imageFile) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
     }
 
     public function getImageIngredients(): EmbeddedFile
@@ -259,6 +259,7 @@ class Product
 
         return $this;
     }
+
     public function getProductStatus(): ?ProductStatus
     {
         return $this->productStatus;

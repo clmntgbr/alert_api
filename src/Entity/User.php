@@ -204,9 +204,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getActiveStore(): Store
     {
         return $this->getStores()->filter(
-            function(Store $store) {
+            function (Store $store) {
                 return $store->isIsActive() === true;
-             }
+            }
         )->first();
     }
 

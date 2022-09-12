@@ -20,9 +20,10 @@ class GetItemsExpireSoonLimited extends AbstractController
 
     public function __construct(
         private ItemRepository $itemRepository,
-        private Security $security
-    ){
-        
+        private Security       $security
+    )
+    {
+
     }
 
     /** @return Item[] */
@@ -30,7 +31,7 @@ class GetItemsExpireSoonLimited extends AbstractController
     {
         /** @var User $user */
         $user = $this->security->getToken()?->getUser();
-        
+
         return $this->itemRepository->findItemsExpireSoon(5, $user->getActiveStore());
     }
 }

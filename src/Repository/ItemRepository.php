@@ -45,8 +45,8 @@ class ItemRepository extends ServiceEntityRepository
      */
     public function findItemsExpireSoon(int $limit, Store $store): array
     {
-        $date = new \DateTime('now');
-        
+        $date = (new \DateTime('now'))->format('Y-m-d');
+
         return $this->createQueryBuilder('i')
             ->where('i.store = :store ')
             ->andWhere('i.expirationDate is not null')
@@ -56,8 +56,7 @@ class ItemRepository extends ServiceEntityRepository
             ->orderBy('i.expirationDate', 'ASC')
             ->setMaxResults($limit)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
     /**
@@ -65,8 +64,8 @@ class ItemRepository extends ServiceEntityRepository
      */
     public function findItemsExpired(int $limit, Store $store): array
     {
-        $date = new \DateTime('now');
-        
+        $date = (new \DateTime('now'))->format('Y-m-d');
+
         return $this->createQueryBuilder('i')
             ->where('i.store = :store ')
             ->andWhere('i.expirationDate is not null')
@@ -76,8 +75,7 @@ class ItemRepository extends ServiceEntityRepository
             ->orderBy('i.expirationDate', 'DESC')
             ->setMaxResults($limit)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
 //    public function findOneBySomeField($value): ?Item

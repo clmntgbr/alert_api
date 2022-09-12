@@ -19,7 +19,7 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 #[ORM\Entity(repositoryClass: StoreRepository::class)]
 #[ApiResource(
     collectionOperations: [
-        'get', 
+        'get',
         'get_active_store' => [
             'method' => 'GET',
             'path' => '/store/active',
@@ -32,8 +32,8 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
         'post'
     ],
     itemOperations: [
-        'get', 
-        'delete', 
+        'get',
+        'delete',
         'put'
     ],
     normalizationContext: [
@@ -123,11 +123,11 @@ class Store
     public function getCountExpiredItems(): int
     {
         $date = new \DateTime('now');
-        
+
         $items = $this->getItems()->filter(
-            function(Item $item) use ($date) {
+            function (Item $item) use ($date) {
                 return $item->getExpirationDate()->format('Y-m-d') < $date->format('Y-m-d');
-             }
+            }
         );
 
         return $items->count();

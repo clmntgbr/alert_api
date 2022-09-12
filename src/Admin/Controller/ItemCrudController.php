@@ -18,8 +18,7 @@ class ItemCrudController extends AbstractCrudController
     public function configureFilters(Filters $filters): Filters
     {
         return $filters
-            ->add('product')
-        ;
+            ->add('product');
     }
 
     public function configureFields(string $pageName): iterable

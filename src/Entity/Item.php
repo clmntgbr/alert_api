@@ -50,7 +50,7 @@ use App\Api\Controller\GetItemsExpiredLimited;
 #[ApiFilter(
     SearchFilter::class,
     properties: [
-    'id' => 'exact', 'store.id' => 'exact']
+        'id' => 'exact', 'store.id' => 'exact']
 )]
 #[ApiFilter(
     BooleanFilter::class,

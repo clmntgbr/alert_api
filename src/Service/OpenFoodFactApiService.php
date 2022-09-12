@@ -12,14 +12,15 @@ use App\Lists\ProductStatusReference;
 class OpenFoodFactApiService
 {
     private array $response = [];
-    
+
     public function __construct(
-        private GetImage $getImage,
+        private GetImage               $getImage,
         private EntityManagerInterface $em,
-        private ProductStatusHelper $productStatusHelper
-    ){
+        private ProductStatusHelper    $productStatusHelper
+    )
+    {
     }
-    
+
     public function find(string $productEan): self
     {
         $url = 'https://fr.openfoodfacts.org/api/v0/produit/' . $productEan . '.json';
@@ -42,8 +43,7 @@ class OpenFoodFactApiService
         $product = new Product();
         $product
             ->setEan($productEan)
-            ->setNutrition(new Nutrition())
-        ;
+            ->setNutrition(new Nutrition());
 
         $this->em->persist($product);
         $this->em->flush();
@@ -57,15 +57,14 @@ class OpenFoodFactApiService
     public function createProduct()
     {
         $nutrition = new Nutrition();
-        
+
         $nutrition
             ->setEcoscoreGrade($this->response['product']['ecoscore_grade'] ?? null)
             ->setEcoscoreScore($this->response['product']['ecoscore_score'] ?? null)
             ->setNutriscoreGrade($this->response['product']['nutriscore_grade'] ?? null)
             ->setNutriscoreScore($this->response['product']['nutriscore_score'] ?? null)
             ->setQuantity($this->response['product']['quantity'] ?? null)
-            ->setIngredientsText($this->response['product']['ingredients_text'] ?? null)
-        ;
+            ->setIngredientsText($this->response['product']['ingredients_text'] ?? null);
 
         $product = new Product();
         $product
@@ -73,8 +72,7 @@ class OpenFoodFactApiService
             ->setName($this->getProductName())
             ->setBrand($this->response['product']['brands'])
             ->setCategories($this->getCategories())
-            ->setNutrition($nutrition)
-        ;
+            ->setNutrition($nutrition);
 
         $file = $this->getImage->get($this->response['product']['image_url'] ?? null);
         if (null !== $file) {
@@ -107,11 +105,11 @@ class OpenFoodFactApiService
         if (array_key_exists('categories_imported', $this->response['product'])) {
             return $this->response['product']['categories_imported'];
         }
-        
+
         if (array_key_exists('categories_old', $this->response['product'])) {
             return $this->response['product']['categories_old'];
         }
-        
+
         if (array_key_exists('categories', $this->response['product'])) {
             return $this->response['product']['categories'];
         }
@@ -124,15 +122,15 @@ class OpenFoodFactApiService
         if (array_key_exists('product_name_fr_imported', $this->response['product'])) {
             return ucwords(strtolower(trim($this->response['product']['product_name_fr_imported'])));
         }
-        
+
         if (array_key_exists('product_name_fr', $this->response['product'])) {
             return ucwords(strtolower(trim($this->response['product']['product_name_fr'])));
         }
-        
+
         if (array_key_exists('product_name', $this->response['product'])) {
             return ucwords(strtolower(trim($this->response['product']['product_name'])));
         }
-        
+
         throw new HttpException(404, 'product not found.');
     }
 }

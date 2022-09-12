@@ -17,7 +17,8 @@ class StoreSubscriber implements EventSubscriber
 {
     public function __construct(
         private int $maxItemPerStore
-    ) {
+    )
+    {
     }
 
     public function getSubscribedEvents(): array

@@ -19,10 +19,11 @@ class GetActiveStore extends AbstractController
     public static $operationName = 'get_active_store';
 
     public function __construct(
-        private StoreRepository $storeRepository,
+        private StoreRepository        $storeRepository,
         private OpenFoodFactApiService $openFoodFactApiService
-    ){
-        
+    )
+    {
+
     }
 
     public function __invoke(Request $request): ?Store

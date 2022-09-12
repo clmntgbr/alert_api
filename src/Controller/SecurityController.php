@@ -14,7 +14,8 @@ class SecurityController extends AbstractController
 {
     public function __construct(
         private Security $security
-    ) {
+    )
+    {
     }
 
     #[Route(path: '/login', name: 'app_login')]
