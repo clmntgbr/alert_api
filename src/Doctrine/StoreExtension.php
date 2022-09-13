@@ -5,21 +5,18 @@ namespace App\Doctrine;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryCollectionExtensionInterface;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryItemExtensionInterface;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGeneratorInterface;
-use App\Entity\Cellar;
 use App\Entity\Store;
 use App\Entity\User;
 use Doctrine\ORM\QueryBuilder;
-use Exception;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Security\Core\Security;
 
 final class StoreExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 {
-    private $security;
-
-    public function __construct(Security $security)
+    public function __construct(
+        private Security $security
+    )
     {
-        $this->security = $security;
     }
 
     public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null): void

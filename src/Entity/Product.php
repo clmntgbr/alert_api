@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\Api\Controller\GetProductByEan;
 use App\Repository\ProductRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,11 +11,11 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Blameable\Traits\BlameableEntity;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Vich\UploaderBundle\Entity\File as EmbeddedFile;
+use Safe\DateTime;
 use Symfony\Component\HttpFoundation\File\File;
-use App\Api\Controller\GetProductByEan;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Entity\File as EmbeddedFile;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource(
@@ -145,7 +146,7 @@ class Product
         return $this->nutrition;
     }
 
-    public function setNutrition(?Nutrition $nutrition): self
+    public function setNutrition(Nutrition $nutrition): self
     {
         $this->nutrition = $nutrition;
 
@@ -153,19 +154,19 @@ class Product
     }
 
     #[Groups(['read_item', 'read_items', 'read_product'])]
-    public function getImagePath()
+    public function getImagePath(): string
     {
         return sprintf('/images/products/%s', $this->getImage()->getName());
     }
 
     #[Groups(['read_item'])]
-    public function getImageIngredientsPath()
+    public function getImageIngredientsPath(): string
     {
         return sprintf('/images/products/%s', $this->getImageIngredients()->getName());
     }
 
     #[Groups(['read_item'])]
-    public function getImageNutritionPath()
+    public function getImageNutritionPath(): string
     {
         return sprintf('/images/products/%s', $this->getImageNutrition()->getName());
     }
@@ -187,13 +188,15 @@ class Product
         return $this->imageIngredientsFile;
     }
 
-    public function setImageIngredientsFile(?File $imageFile = null)
+    public function setImageIngredientsFile(?File $imageFile = null): self
     {
         $this->imageIngredientsFile = $imageFile;
 
         if (null !== $imageFile) {
-            $this->updatedAt = new \DateTimeImmutable();
+            $this->updatedAt = new DateTime();
         }
+
+        return $this;
     }
 
     public function getImageNutritionFile(): ?File
@@ -201,13 +204,15 @@ class Product
         return $this->imageNutritionFile;
     }
 
-    public function setImageNutritionFile(?File $imageFile = null)
+    public function setImageNutritionFile(?File $imageFile = null): self
     {
         $this->imageNutritionFile = $imageFile;
 
         if (null !== $imageFile) {
-            $this->updatedAt = new \DateTimeImmutable();
+            $this->updatedAt = new DateTime();
         }
+
+        return $this;
     }
 
     public function getImageFile(): ?File
@@ -215,13 +220,15 @@ class Product
         return $this->imageFile;
     }
 
-    public function setImageFile(?File $imageFile = null)
+    public function setImageFile(?File $imageFile = null): self
     {
         $this->imageFile = $imageFile;
 
         if (null !== $imageFile) {
-            $this->updatedAt = new \DateTimeImmutable();
+            $this->updatedAt = new DateTime();
         }
+
+        return $this;
     }
 
     public function getImageIngredients(): EmbeddedFile
@@ -265,7 +272,7 @@ class Product
         return $this->productStatus;
     }
 
-    public function setProductStatus(?ProductStatus $productStatus): self
+    public function setProductStatus(ProductStatus $productStatus): self
     {
         $this->productStatus = $productStatus;
 

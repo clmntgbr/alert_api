@@ -31,12 +31,19 @@ class ProductStatusHistory
         return $this->id;
     }
 
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function getProduct(): ?Product
     {
         return $this->product;
     }
 
-    public function setProduct(?Product $product): self
+    public function setProduct(Product $product): self
     {
         $this->product = $product;
 
@@ -48,7 +55,7 @@ class ProductStatusHistory
         return $this->productStatus;
     }
 
-    public function setProductStatus(?ProductStatus $productStatus): self
+    public function setProductStatus(ProductStatus $productStatus): self
     {
         $this->productStatus = $productStatus;
 

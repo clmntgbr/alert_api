@@ -3,10 +3,10 @@
 namespace App\Admin\Controller;
 
 use App\Entity\Item;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
-use EasyCorp\Bundle\EasyAdminBundle\Config\Filters;
 
 class ItemCrudController extends AbstractCrudController
 {

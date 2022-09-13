@@ -5,8 +5,7 @@ namespace App\Api\Controller;
 use App\Entity\Product;
 use App\Repository\ProductRepository;
 use App\Service\OpenFoodFactApiService;
-use App\Service\PostProductByEanService;
-use Hautelook\AliceBundle\Functional\TestBundle\Entity\Prod;
+use App\Utils\GetAttribute;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -14,11 +13,12 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 #[AsController]
 class GetProductByEan extends AbstractController
 {
-    public static $operationName = 'get_product_by_ean';
+    public static string $operationName = 'get_product_by_ean';
 
     public function __construct(
         private ProductRepository      $productRepository,
-        private OpenFoodFactApiService $openFoodFactApiService
+        private OpenFoodFactApiService $openFoodFactApiService,
+        private GetAttribute $getAttribute
     )
     {
 
@@ -26,14 +26,16 @@ class GetProductByEan extends AbstractController
 
     public function __invoke(Request $request): Product
     {
-        $product = $this->productRepository->findOneBy(['ean' => $request->attributes->get('ean')]);
+        $ean = $this->getAttribute->get('ean', $request);
+
+        $product = $this->productRepository->findOneBy(['ean' => $ean]);
 
         if ($product instanceof Product) {
             return $product;
         }
 
         $product = $this->openFoodFactApiService
-            ->find($request->attributes->get('ean'))
+            ->find($ean)
             ->createProduct();
 
         return $product;

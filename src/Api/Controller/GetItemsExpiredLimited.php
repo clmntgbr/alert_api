@@ -3,20 +3,17 @@
 namespace App\Api\Controller;
 
 use App\Entity\Item;
-use App\Entity\Product;
+use App\Entity\User;
 use App\Repository\ItemRepository;
-use App\Repository\ProductRepository;
-use App\Service\OpenFoodFactApiService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\Security\Core\Security;
-use App\Entity\User;
 
 #[AsController]
 class GetItemsExpiredLimited extends AbstractController
 {
-    public static $operationName = 'get_items_by_expiration_date_limited';
+    public static string $operationName = 'get_items_expired_limited';
 
     public function __construct(
         private ItemRepository $itemRepository,
@@ -31,7 +28,6 @@ class GetItemsExpiredLimited extends AbstractController
     {
         /** @var User $user */
         $user = $this->security->getToken()?->getUser();
-
         return $this->itemRepository->findItemsExpired(5, $user->getActiveStore());
     }
 }

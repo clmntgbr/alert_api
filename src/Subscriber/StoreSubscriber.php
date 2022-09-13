@@ -2,16 +2,10 @@
 
 namespace App\Subscriber;
 
-use App\Entity\Item;
 use App\Entity\Store;
-use App\Entity\User;
-use App\Repository\ItemRepository;
-use App\Repository\StoreRepository;
-use DateTime;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class StoreSubscriber implements EventSubscriber
 {

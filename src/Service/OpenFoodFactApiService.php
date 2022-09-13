@@ -4,10 +4,11 @@ namespace App\Service;
 
 use App\Entity\Nutrition;
 use App\Entity\Product;
+use Safe;
 use App\Helper\ProductStatusHelper;
+use App\Lists\ProductStatusReference;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use App\Lists\ProductStatusReference;
 
 class OpenFoodFactApiService
 {
@@ -26,7 +27,7 @@ class OpenFoodFactApiService
         $url = 'https://fr.openfoodfacts.org/api/v0/produit/' . $productEan . '.json';
 
         $response = file_get_contents($url);
-        $response = json_decode($response, true);
+        $response = Safe\json_decode($response, true);
 
         if (isset($response['status_verbose']) && $response['status_verbose'] === 'product not found') {
             $this->createUnfoundProduct($productEan);
@@ -38,7 +39,7 @@ class OpenFoodFactApiService
         return $this;
     }
 
-    public function createUnfoundProduct(string $productEan)
+    public function createUnfoundProduct(string $productEan): void
     {
         $product = new Product();
         $product
@@ -54,7 +55,7 @@ class OpenFoodFactApiService
         );
     }
 
-    public function createProduct()
+    public function createProduct(): Product
     {
         $nutrition = new Nutrition();
 

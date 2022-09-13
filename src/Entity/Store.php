@@ -2,9 +2,7 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use App\Api\Controller\GetActiveStore;
 use App\Repository\StoreRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -55,15 +53,15 @@ class Store
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING)]
-    #[Groups('read_store', 'write_store')]
+    #[Groups(['read_store', 'write_store'])]
     private string $name;
 
     #[ORM\Column(type: Types::BOOLEAN)]
-    #[Groups('read_store', 'write_store')]
+    #[Groups(['read_store', 'write_store'])]
     private bool $isActive;
 
     #[ORM\Column(type: Types::INTEGER)]
-    #[Groups('read_store')]
+    #[Groups(['read_store'])]
     private int $maxItemPerStore;
 
     #[ORM\ManyToOne(targetEntity: User::class, fetch: 'EAGER', inversedBy: 'stores')]
@@ -126,7 +124,7 @@ class Store
 
         $items = $this->getItems()->filter(
             function (Item $item) use ($date) {
-                return $item->getExpirationDate()->format('Y-m-d') < $date->format('Y-m-d');
+                return $item->getExpirationDate()?->format('Y-m-d') < $date->format('Y-m-d');
             }
         );
 
@@ -138,7 +136,7 @@ class Store
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(User $user): self
     {
         $this->user = $user;
 

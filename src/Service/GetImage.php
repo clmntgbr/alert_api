@@ -69,7 +69,7 @@ class GetImage
         return 'jpg';
     }
 
-    private function getImageDimensions(string $url)
+    private function getImageDimensions(string $url): array
     {
         $size = getimagesize($url);
 

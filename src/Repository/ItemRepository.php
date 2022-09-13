@@ -3,9 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Item;
+use App\Entity\Store;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use App\Entity\Store;
 
 /**
  * @extends ServiceEntityRepository<Item>
@@ -41,9 +41,9 @@ class ItemRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Item[]
+     * @return array<Item>
      */
-    public function findItemsExpireSoon(int $limit, Store $store): array
+    public function findItemsExpireSoon(int $limit, ?Store $store)
     {
         $date = (new \DateTime('now'))->format('Y-m-d');
 
@@ -60,7 +60,7 @@ class ItemRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Item[]
+     * @return array<Item>
      */
     public function findItemsExpired(int $limit, Store $store): array
     {

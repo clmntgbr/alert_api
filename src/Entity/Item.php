@@ -6,6 +6,8 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use App\Api\Controller\GetItemsExpiredLimited;
+use App\Api\Controller\GetItemsExpireSoonLimited;
 use App\Repository\ItemRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -14,8 +16,6 @@ use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\Serializer\Annotation\Context;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
-use App\Api\Controller\GetItemsExpireSoonLimited;
-use App\Api\Controller\GetItemsExpiredLimited;
 
 #[ORM\Entity(repositoryClass: ItemRepository::class)]
 #[ApiResource(
@@ -89,7 +89,7 @@ class Item
         return $this->product;
     }
 
-    public function setProduct(?Product $product): self
+    public function setProduct(Product $product): self
     {
         $this->product = $product;
 
@@ -101,7 +101,7 @@ class Item
         return $this->store;
     }
 
-    public function setStore(?Store $store): self
+    public function setStore(Store $store): self
     {
         $this->store = $store;
 
