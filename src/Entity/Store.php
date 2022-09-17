@@ -163,12 +163,7 @@ class Store
 
     public function removeItem(Item $item): self
     {
-        if ($this->items->removeElement($item)) {
-            // set the owning side to null (unless already changed)
-            if ($item->getStore() === $this) {
-                $item->setStore(null);
-            }
-        }
+        $this->items->removeElement($item);
 
         return $this;
     }

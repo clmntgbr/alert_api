@@ -13,6 +13,10 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Vich\UploaderBundle\Entity\File as EmbeddedFile;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\HttpFoundation\File\File;
+use Safe\DateTime;
 
 #[ORM\Entity(repositoryClass: UserRepository::class), UniqueEntity('email', 'username')]
 #[ApiResource(
@@ -27,6 +31,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
         'groups' => ['read_user'],
     ],
 )]
+#[Vich\Uploadable]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -43,6 +48,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::STRING, length: 200)]
     private string $username;
 
+    #[ORM\Column(type: Types::STRING)]
+    #[Groups(['read_user'])]
+    private string $name;
+
     #[ORM\Column(type: Types::JSON)]
     #[Groups(['read_user'])]
     private array $roles = [];
@@ -58,6 +67,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['read_user'])]
     private Collection $stores;
 
+    #[Vich\UploadableField(mapping: 'product_image', fileNameProperty: 'image.name', size: 'image.size', mimeType: 'image.mimeType', originalName: 'image.originalName', dimensions: 'image.dimensions')]
+    private ?File $imageFile = null;
+
+    #[ORM\Embedded(class: 'Vich\UploaderBundle\Entity\File')]
+    private EmbeddedFile $image;
+
     private ?string $plainPassword = null;
 
     #[ORM\Column(type: Types::BOOLEAN)]
@@ -66,9 +81,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
+        $this->image = new EmbeddedFile();
         $this->id = rand();
         $this->isEnable = false;
         $this->stores = new ArrayCollection();
+    }
+
+    #[Groups(['read_user'])]
+    public function getImagePath(): string
+    {
+        return sprintf('/images/%s', $this->getImage()->getName());
     }
 
     public function __toString(): string
@@ -247,12 +269,47 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeStore(Store $store): self
     {
-        if ($this->stores->removeElement($store)) {
-            // set the owning side to null (unless already changed)
-            if ($store->getUser() === $this) {
-                $store->setUser(null);
-            }
+        $this->stores->removeElement($store);
+
+        return $this;
+    }
+
+    public function getImage(): EmbeddedFile
+    {
+        return $this->image;
+    }
+
+    public function setImage(EmbeddedFile $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageFile(?File $imageFile = null): self
+    {
+        $this->imageFile = $imageFile;
+
+        if (null !== $imageFile) {
+            $this->updatedAt = new DateTime();
         }
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }

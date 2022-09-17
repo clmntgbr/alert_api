@@ -18,7 +18,8 @@ class ItemCrudController extends AbstractCrudController
     public function configureFilters(Filters $filters): Filters
     {
         return $filters
-            ->add('product');
+            ->add('product')
+            ->add('id');
     }
 
     public function configureFields(string $pageName): iterable
@@ -28,6 +29,7 @@ class ItemCrudController extends AbstractCrudController
             AssociationField::new('product'),
             AssociationField::new('store'),
             Field::new('expirationDate'),
+            Field::new('isLiked'),
         ];
     }
 }

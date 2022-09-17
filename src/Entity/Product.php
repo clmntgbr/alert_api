@@ -291,13 +291,16 @@ class Product
 
     public function removeProductStatusHistory(ProductStatusHistory $productStatusHistory): self
     {
-        if ($this->productStatusHistories->removeElement($productStatusHistory)) {
-            // set the owning side to null (unless already changed)
-            if ($productStatusHistory->getProduct() === $this) {
-                $productStatusHistory->setProduct(null);
-            }
-        }
+        $this->productStatusHistories->removeElement($productStatusHistory);
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, ProductStatusHistory>
+     */
+    public function getProductStatusHistories(): Collection
+    {
+        return $this->productStatusHistories;
     }
 }

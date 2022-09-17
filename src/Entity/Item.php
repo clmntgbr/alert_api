@@ -44,7 +44,7 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
     itemOperations: [
         'get' => ['normalization_context' => ['skip_null_values' => false, 'groups' => ['read_item']]],
         'delete',
-        'put'
+        'put' => ['normalization_context' => ['skip_null_values' => false, 'groups' => ['put_item']]]
     ],
 )]
 #[ApiFilter(
@@ -72,12 +72,21 @@ class Item
     #[Context([DateTimeNormalizer::FORMAT_KEY => 'd/m/Y'])]
     private ?\DateTimeInterface $expirationDate;
 
+    #[ORM\Column(type: Types::BOOLEAN)]
+    #[Groups(['read_item', 'read_items', 'put_item'])]
+    private bool $isLiked;
+
     #[ORM\ManyToOne(targetEntity: Product::class, fetch: 'EXTRA_LAZY')]
     #[Groups(['read_item', 'read_items', 'post_item'])]
     private Product $product;
 
     #[ORM\ManyToOne(targetEntity: Store::class, fetch: 'EAGER', inversedBy: 'items')]
     private Store $store;
+
+    public function __construct()
+    {
+        $this->isLiked = false;
+    }
 
     public function getId(): ?int
     {
@@ -116,6 +125,18 @@ class Item
     public function setExpirationDate(?\DateTimeInterface $expirationDate): self
     {
         $this->expirationDate = $expirationDate;
+
+        return $this;
+    }
+
+    public function isIsLiked(): ?bool
+    {
+        return $this->isLiked;
+    }
+
+    public function setIsLiked(bool $isLiked): self
+    {
+        $this->isLiked = $isLiked;
 
         return $this;
     }
