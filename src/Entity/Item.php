@@ -8,6 +8,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Api\Controller\GetItemsExpiredLimited;
 use App\Api\Controller\GetItemsExpireSoonLimited;
+use App\Api\Controller\GetItemsExpired;
+use App\Api\Controller\GetItemsExpireSoon;
 use App\Repository\ItemRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -39,7 +41,25 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
             'deserialize' => false,
             'read' => false,
             'normalization_context' => ['skip_null_values' => false, 'groups' => ['read_items']]
-        ]
+        ],
+        'get_items_by_expiration_date_soon' => [
+            'method' => 'GET',
+            'path' => '/items/expire_soon',
+            'controller' => GetItemsExpireSoon::class,
+            'pagination_enabled' => false,
+            'deserialize' => false,
+            'read' => false,
+            'normalization_context' => ['skip_null_values' => false, 'groups' => ['read_items']]
+        ],
+        'get_items_by_expiration_date' => [
+            'method' => 'GET',
+            'path' => '/items/expired/limit',
+            'controller' => GetItemsExpired::class,
+            'pagination_enabled' => false,
+            'deserialize' => false,
+            'read' => false,
+            'normalization_context' => ['skip_null_values' => false, 'groups' => ['read_items']]
+        ],
     ],
     itemOperations: [
         'get' => ['normalization_context' => ['skip_null_values' => false, 'groups' => ['read_item']]],
