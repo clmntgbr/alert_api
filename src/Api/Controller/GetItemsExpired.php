@@ -26,8 +26,14 @@ class GetItemsExpired extends AbstractController
     /** @return Item[] */
     public function __invoke(Request $request)
     {
+        $limit = $request->query->get('limit');
+        $index = $request->query->get('index');
+
         /** @var User $user */
         $user = $this->security->getToken()?->getUser();
-        return $this->itemRepository->findItemsExpired(100, $user->getActiveStore());
+
+        $items = $this->itemRepository->findItemsExpired($limit + $index, $user->getActiveStore());
+
+        return array_slice($items, $index, $limit + $index);
     }
 }

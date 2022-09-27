@@ -6,8 +6,6 @@ use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
-use App\Api\Controller\GetItemsExpiredLimited;
-use App\Api\Controller\GetItemsExpireSoonLimited;
 use App\Api\Controller\GetItemsExpired;
 use App\Api\Controller\GetItemsExpireSoon;
 use App\Repository\ItemRepository;
@@ -24,24 +22,6 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
     collectionOperations: [
         'get' => ['normalization_context' => ['skip_null_values' => false, 'groups' => ['read_items']]],
         'post' => ['denormalization_context' => ['groups' => ['post_item']]],
-        'get_items_by_expiration_date_soon_limited' => [
-            'method' => 'GET',
-            'path' => '/items/expire_soon/limited',
-            'controller' => GetItemsExpireSoonLimited::class,
-            'pagination_enabled' => false,
-            'deserialize' => false,
-            'read' => false,
-            'normalization_context' => ['skip_null_values' => false, 'groups' => ['read_items']]
-        ],
-        'get_items_by_expiration_date_limited' => [
-            'method' => 'GET',
-            'path' => '/items/expired/limited',
-            'controller' => GetItemsExpiredLimited::class,
-            'pagination_enabled' => false,
-            'deserialize' => false,
-            'read' => false,
-            'normalization_context' => ['skip_null_values' => false, 'groups' => ['read_items']]
-        ],
         'get_items_by_expiration_date_soon' => [
             'method' => 'GET',
             'path' => '/items/expire_soon',
@@ -53,7 +33,7 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
         ],
         'get_items_by_expiration_date' => [
             'method' => 'GET',
-            'path' => '/items/expired/limit',
+            'path' => '/items/expired',
             'controller' => GetItemsExpired::class,
             'pagination_enabled' => false,
             'deserialize' => false,
