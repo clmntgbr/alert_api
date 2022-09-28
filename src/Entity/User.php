@@ -223,7 +223,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->isEnable;
     }
 
-    public function getActiveStore(): Store|false
+    public function getActiveStore(): Store|bool
     {
         return $this->getStores()->filter(
             function (Store $store) {
