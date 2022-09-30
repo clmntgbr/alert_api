@@ -42,6 +42,6 @@ final class ItemExtension implements QueryCollectionExtensionInterface, QueryIte
 
         $rootAlias = $queryBuilder->getRootAliases()[0];
         $queryBuilder->andWhere(sprintf('%s.store IN (:store)', $rootAlias));
-        $queryBuilder->setParameter('store', $user->getStores());
+        $queryBuilder->setParameter('store', $user->getActiveStore());
     }
 }

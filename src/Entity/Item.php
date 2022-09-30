@@ -8,6 +8,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Api\Controller\GetItemsExpired;
 use App\Api\Controller\GetItemsExpireSoon;
+use App\Api\Controller\GetItemsLiked;
 use App\Repository\ItemRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -35,6 +36,15 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
             'method' => 'GET',
             'path' => '/items/expired',
             'controller' => GetItemsExpired::class,
+            'pagination_enabled' => false,
+            'deserialize' => false,
+            'read' => false,
+            'normalization_context' => ['skip_null_values' => false, 'groups' => ['read_items']]
+        ],
+        'get_items_by_like' => [
+            'method' => 'GET',
+            'path' => '/items/liked',
+            'controller' => GetItemsLiked::class,
             'pagination_enabled' => false,
             'deserialize' => false,
             'read' => false,
@@ -81,6 +91,7 @@ class Item
     private Product $product;
 
     #[ORM\ManyToOne(targetEntity: Store::class, fetch: 'EAGER', inversedBy: 'items')]
+    #[Groups(['read_items'])]
     private Store $store;
 
     public function __construct()
