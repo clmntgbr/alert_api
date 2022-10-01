@@ -45,7 +45,6 @@
     },
     "require-dev": {
         "hautelook/alice-bundle": "^2.11",
-        "phpstan/phpstan": "^1.8",
         "symfony/maker-bundle": "^1.45",
         "symfony/web-profiler-bundle": "6.1.*",
         "thecodingmachine/phpstan-safe-rule": "^1.2"
