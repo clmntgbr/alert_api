@@ -16,12 +16,10 @@ class GetProductByEan extends AbstractController
     public static string $operationName = 'get_product_by_ean';
 
     public function __construct(
-        private ProductRepository      $productRepository,
+        private ProductRepository $productRepository,
         private OpenFoodFactApiService $openFoodFactApiService,
         private GetAttribute $getAttribute
-    )
-    {
-
+    ) {
     }
 
     public function __invoke(Request $request): Product

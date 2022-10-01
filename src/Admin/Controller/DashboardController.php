@@ -29,9 +29,9 @@ class DashboardController extends AbstractDashboardController
             ->setTitle('App');
     }
 
+    /** @param User $user */
     public function configureUserMenu(UserInterface $user): UserMenu
     {
-        /** @var User $user */
         return parent::configureUserMenu($user)->setName($user->getEmail());
     }
 

@@ -61,5 +61,4 @@ class ProductStatus
 
         return $this;
     }
-
 }

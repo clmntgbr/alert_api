@@ -9,7 +9,7 @@ class GetAttribute
     public function get(string $key, Request $request): string
     {
         $value = $request->attributes->get($key);
-        if (gettype($value) !== 'string') {
+        if ('string' !== gettype($value)) {
             return '';
         }
 

@@ -15,9 +15,8 @@ class ItemSubscriber implements EventSubscriber
 {
     public function __construct(
         private StoreRepository $storeRepository,
-        private Security        $security
-    )
-    {
+        private Security $security
+    ) {
     }
 
     public function getSubscribedEvents(): array

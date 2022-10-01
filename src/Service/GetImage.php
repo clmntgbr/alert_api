@@ -39,7 +39,7 @@ class GetImage
     {
         $headers = get_headers($url, 1);
 
-        if ($headers[0] !== 'HTTP/1.1 200 OK') {
+        if ('HTTP/1.1 200 OK' !== $headers[0]) {
             return false;
         }
 

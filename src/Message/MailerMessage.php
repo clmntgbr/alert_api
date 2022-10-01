@@ -8,8 +8,7 @@ final class MailerMessage
 {
     public function __construct(
         private Email $email
-    )
-    {
+    ) {
     }
 
     public function getEmail(): Email

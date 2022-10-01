@@ -10,10 +10,9 @@ use Doctrine\ORM\EntityManagerInterface;
 class ProductStatusHelper
 {
     public function __construct(
-        private EntityManagerInterface  $em,
+        private EntityManagerInterface $em,
         private ProductStatusRepository $productStatusRepository
-    )
-    {
+    ) {
     }
 
     public function setStatus(string $reference, Product $product): void

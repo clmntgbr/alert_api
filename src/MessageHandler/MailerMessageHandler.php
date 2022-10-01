@@ -11,8 +11,7 @@ final class MailerMessageHandler implements MessageHandlerInterface
 {
     public function __construct(
         private MailerInterface $mailer
-    )
-    {
+    ) {
     }
 
     /**

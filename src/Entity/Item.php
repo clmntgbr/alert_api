@@ -30,7 +30,7 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
             'pagination_enabled' => false,
             'deserialize' => false,
             'read' => false,
-            'normalization_context' => ['skip_null_values' => false, 'groups' => ['read_items']]
+            'normalization_context' => ['skip_null_values' => false, 'groups' => ['read_items']],
         ],
         'get_items_by_expiration_date' => [
             'method' => 'GET',
@@ -39,7 +39,7 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
             'pagination_enabled' => false,
             'deserialize' => false,
             'read' => false,
-            'normalization_context' => ['skip_null_values' => false, 'groups' => ['read_items']]
+            'normalization_context' => ['skip_null_values' => false, 'groups' => ['read_items']],
         ],
         'get_items_by_like' => [
             'method' => 'GET',
@@ -48,24 +48,24 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
             'pagination_enabled' => false,
             'deserialize' => false,
             'read' => false,
-            'normalization_context' => ['skip_null_values' => false, 'groups' => ['read_items']]
+            'normalization_context' => ['skip_null_values' => false, 'groups' => ['read_items']],
         ],
     ],
     itemOperations: [
         'get' => ['normalization_context' => ['skip_null_values' => false, 'groups' => ['read_item']]],
         'delete',
-        'put' => ['normalization_context' => ['skip_null_values' => false, 'groups' => ['put_item']]]
+        'put' => ['normalization_context' => ['skip_null_values' => false, 'groups' => ['put_item']]],
     ],
 )]
 #[ApiFilter(
     SearchFilter::class,
     properties: [
-        'id' => 'exact', 'store.id' => 'exact']
+        'id' => 'exact', 'store.id' => 'exact', ]
 )]
 #[ApiFilter(
     BooleanFilter::class,
     properties: [
-        'store.isActive'
+        'store.isActive',
     ]
 )]
 class Item

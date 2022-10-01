@@ -15,8 +15,7 @@ final class ItemExtension implements QueryCollectionExtensionInterface, QueryIte
 {
     public function __construct(
         private Security $security
-    )
-    {
+    ) {
     }
 
     public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, string $operationName = null): void

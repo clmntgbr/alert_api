@@ -53,6 +53,10 @@ services:
     volumes:
       - cPh0gwonYN:/var/lib/mysql
 
+  qa:
+    container_name: ${PROJECT_NAME}_qa
+    image: jakzal/phpqa:latest
+
 volumes:
   cPh0gwonYN: {}
   certs: {}

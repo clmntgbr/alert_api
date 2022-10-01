@@ -25,14 +25,14 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
             'pagination_enabled' => false,
             'deserialize' => false,
             'read' => false,
-            'normalization_context' => ['skip_null_values' => false, 'groups' => ['read_store']]
+            'normalization_context' => ['skip_null_values' => false, 'groups' => ['read_store']],
         ],
-        'post'
+        'post',
     ],
     itemOperations: [
         'get',
         'delete',
-        'put'
+        'put',
     ],
     normalizationContext: [
         'skip_null_values' => false,

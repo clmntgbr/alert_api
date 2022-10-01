@@ -17,10 +17,8 @@ class GetItemsExpireSoon extends AbstractController
 
     public function __construct(
         private ItemRepository $itemRepository,
-        private Security       $security
-    )
-    {
-
+        private Security $security
+    ) {
     }
 
     /** @return Item[] */

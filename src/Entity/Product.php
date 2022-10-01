@@ -29,8 +29,8 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             'pagination_enabled' => false,
             'deserialize' => false,
             'read' => false,
-            'normalization_context' => ['skip_null_values' => false, 'groups' => ['read_product']]
-        ]
+            'normalization_context' => ['skip_null_values' => false, 'groups' => ['read_product']],
+        ],
     ],
 )]
 #[Vich\Uploadable]
