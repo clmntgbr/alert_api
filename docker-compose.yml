@@ -2,6 +2,7 @@ version: '3.5'
 
 services:
   php:
+    restart: unless-stopped
     container_name: ${PROJECT_NAME}_php
     build:
       context: .
@@ -24,6 +25,7 @@ services:
     command: --define opcache.validate_timestamps=On
 
   nginx:
+    restart: unless-stopped
     container_name: ${PROJECT_NAME}_nginx
     depends_on:
       - php
@@ -42,6 +44,7 @@ services:
       - ./.deployment/docker/containers/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
 
   database:
+    restart: unless-stopped
     container_name: ${PROJECT_NAME}_database
     image: mariadb:10.4.19
     env_file:
