@@ -68,12 +68,8 @@ class ItemRepository extends ServiceEntityRepository
 
         return $this->createQueryBuilder('i')
             ->where('i.store = :store ')
-            ->andWhere('i.expirationDate is not null')
-            ->andWhere('i.expirationDate >= :date')
             ->andWhere('i.isLiked = 1')
-            ->setParameter('date', $date)
             ->setParameter('store', $store)
-            ->orderBy('i.expirationDate', 'ASC')
             ->setMaxResults($limit)
             ->getQuery()
             ->getResult();

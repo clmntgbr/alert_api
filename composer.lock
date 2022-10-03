@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "fe92f4821930ffc52a9cab675b6b9d8e",
+    "content-hash": "1bf8d92c8695bfe1670f2e18834308ce",
     "packages": [
         {
             "name": "api-platform/core",
@@ -9056,16 +9056,16 @@
         },
         {
             "name": "nelmio/alice",
-            "version": "v3.11.0",
+            "version": "3.12.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nelmio/alice.git",
-                "reference": "bb4ed6255bf95c5fc23d1d63d7ea92306d48fcca"
+                "reference": "0297bae4c4a6cc580c7949656a8d1334ce65e690"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nelmio/alice/zipball/bb4ed6255bf95c5fc23d1d63d7ea92306d48fcca",
-                "reference": "bb4ed6255bf95c5fc23d1d63d7ea92306d48fcca",
+                "url": "https://api.github.com/repos/nelmio/alice/zipball/0297bae4c4a6cc580c7949656a8d1334ce65e690",
+                "reference": "0297bae4c4a6cc580c7949656a8d1334ce65e690",
                 "shasum": ""
             },
             "require": {
@@ -9138,7 +9138,7 @@
             ],
             "support": {
                 "issues": "https://github.com/nelmio/alice/issues",
-                "source": "https://github.com/nelmio/alice/tree/v3.11.0"
+                "source": "https://github.com/nelmio/alice/tree/3.12.0"
             },
             "funding": [
                 {
@@ -9146,7 +9146,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2022-07-03T12:27:05+00:00"
+            "time": "2022-10-02T12:48:07+00:00"
         },
         {
             "name": "nikic/php-parser",
