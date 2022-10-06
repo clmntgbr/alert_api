@@ -5,6 +5,7 @@ namespace App\Api\Controller;
 use App\Entity\Item;
 use App\Entity\User;
 use App\Repository\ItemRepository;
+use App\Repository\StoreRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Attribute\AsController;
@@ -17,6 +18,7 @@ class GetItemsLiked extends AbstractController
 
     public function __construct(
         private ItemRepository $itemRepository,
+        private StoreRepository $storeRepository,
         private Security $security
     ) {
     }
@@ -26,12 +28,24 @@ class GetItemsLiked extends AbstractController
     {
         $limit = $request->query->get('limit');
         $index = $request->query->get('index');
+        $store_id = $this->getStoreId($request->query->get('store_isActive'), $request->query->get('store_id'));
 
-        /** @var User $user */
-        $user = $this->security->getToken()?->getUser();
-
-        $items = $this->itemRepository->findItemsLiked($limit + $index, $user->getActiveStore());
+        $items = $this->itemRepository->findItemsLiked($limit + $index, $store_id);
 
         return array_slice($items, $index, $limit + $index);
+    }
+
+    private function getStoreId(?string $store_isActive, ?string $store_id) 
+    {
+        if ($store_isActive === null) {
+            return $store_id;
+        }
+
+        if ($store_id === null) {
+            $store = $this->storeRepository->findOneBy(['isActive' => true]);
+            return $store->getId();
+        }
+
+        return 0;
     }
 }
