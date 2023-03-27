@@ -7,13 +7,32 @@
         "php": ">=8.1",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "api-platform/core": "^2.6",
+        "doctrine/annotations": "^2.0",
+        "doctrine/doctrine-bundle": "^2.9",
+        "doctrine/doctrine-migrations-bundle": "^3.2",
+        "doctrine/orm": "^2.14",
+        "easycorp/easyadmin-bundle": "^4.6",
+        "league/flysystem-bundle": "^3.1",
+        "nelmio/cors-bundle": "^2.3",
+        "stof/doctrine-extensions-bundle": "^1.7",
+        "symfony/asset": "6.2.*",
         "symfony/console": "6.2.*",
         "symfony/dotenv": "6.2.*",
+        "symfony/expression-language": "6.2.*",
         "symfony/flex": "^2",
         "symfony/framework-bundle": "6.2.*",
+        "symfony/property-access": "6.2.*",
+        "symfony/property-info": "6.2.*",
         "symfony/runtime": "6.2.*",
+        "symfony/security-bundle": "6.2.*",
+        "symfony/serializer": "6.2.*",
+        "symfony/twig-bundle": "6.2.*",
+        "symfony/validator": "6.2.*",
         "symfony/yaml": "6.2.*",
-        "thecodingmachine/safe": "^2.3"
+        "thecodingmachine/safe": "^2.4",
+        "vich/uploader-bundle": "^2.1",
+        "ext-http": "*"
     },
     "require-dev": {
         "symfony/maker-bundle": "^1.46",
@@ -68,8 +87,9 @@
     },
     "extra": {
         "symfony": {
-            "allow-contrib": false,
-            "require": "6.2.*"
+            "allow-contrib": true,
+            "require": "6.2.*",
+            "docker": true
         }
     }
 }

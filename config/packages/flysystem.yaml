@@ -1,0 +1,14 @@
+flysystem:
+  storages:
+    default.storage:
+      adapter: "local"
+      options:
+        directory: "%kernel.project_dir%/public/images/products"
+    user.storage:
+      adapter: "local"
+      options:
+        directory: "%kernel.project_dir%/public/images/users"
+    product.storage:
+      adapter: "local"
+      options:
+        directory: "%kernel.project_dir%/public/images/products"
