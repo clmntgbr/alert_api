@@ -1,0 +1,141 @@
+App\Entity\Product:
+  product_1:
+    id: 1
+    ean: "3017620425035"
+    brand: "Ferrero"
+    name: "Pâte à tartiner Nutella noisettes et cacao - 1kg"
+    categories: "snack, chocolat"
+    product_nutrition: "@nutrition_1"
+    status: "validated"
+    image.name: "62dc40bc23dae511387391.jpg"
+    image.originalName: "62dc40bc23dae511387391.jpg"
+    image.mimeType: "image/jpg"
+    image.size: "19154"
+    image.dimensions: [ "251", "400" ]
+    imageIngredients.name: "62dc40bca0d2a417324733.jpg"
+    imageIngredients.originalName: "62dc410156e27584705264.jpg"
+    imageIngredients.mimeType: "image/jpg"
+    imageIngredients.size: "12911"
+    imageIngredients.dimensions: [ "88", "400" ]
+    imageNutrition.name: "62dc4101c8b64701052544.jpg"
+    imageNutrition.originalName: "62dc4101c8b64701052544.jpg"
+    imageNutrition.mimeType: "image/jpg"
+    imageNutrition.size: "12137"
+    imageNutrition.dimensions: [ "400", "68" ]
+
+  product_2:
+    id: 2
+    ean: "8000500310427"
+    brand: "Nutella"
+    categories: "snack, chocolat"
+    name: "Biscuits Nutella Biscuits x22 biscuits fourrés - 304g"
+    product_nutrition: "@nutrition_2"
+    status: "validated"
+    image.name: "62dc40d321c8b809318808.jpg"
+    image.originalName: "62dc40d321c8b809318808.jpg"
+    image.mimeType: "image/jpg"
+    image.size: "19154"
+    image.dimensions: [ "251", "400" ]
+    imageIngredients.name: "62dc40d3a0ca8928142210.jpg"
+    imageIngredients.originalName: "62dc40d3a0ca8928142210.jpg"
+    imageIngredients.mimeType: "image/jpg"
+    imageIngredients.size: "12911"
+    imageIngredients.dimensions: [ "88", "400" ]
+    imageNutrition.name: "62dc40d421563440859100.jpg"
+    imageNutrition.originalName: "62dc40d421563440859100.jpg"
+    imageNutrition.mimeType: "image/jpg"
+    imageNutrition.size: "12137"
+    imageNutrition.dimensions: [ "400", "68" ]
+
+  product_3:
+    id: 3
+    ean: "3229820129488"
+    brand: "Bjorg"
+    categories: "snack, chocolat"
+    name: "Muesli Raisin, Figue, Abricot"
+    status: "validated"
+    product_nutrition: "@nutrition_3"
+    image.name: "62dc40de2dd32850154612.jpg"
+    image.originalName: "62dc40de2dd32850154612.jpg"
+    image.mimeType: "image/jpg"
+    image.size: "19154"
+    image.dimensions: [ "251", "400" ]
+    imageIngredients.name: "62dc40deb04f9930919471.jpg"
+    imageIngredients.originalName: "62dc40deb04f9930919471.jpg"
+    imageIngredients.mimeType: "image/jpg"
+    imageIngredients.size: "12911"
+    imageIngredients.dimensions: [ "88", "400" ]
+    imageNutrition.name: "62dc40df3b4c5557886658.jpg"
+    imageNutrition.originalName: "62dc40df3b4c5557886658.jpg"
+    imageNutrition.mimeType: "image/jpg"
+    imageNutrition.size: "12137"
+    imageNutrition.dimensions: [ "400", "68" ]
+
+  product_4:
+    id: 4
+    ean: "3392460480827"
+    brand: "Heudebert"
+    name: "Biscottes 6 Céréales"
+    product_nutrition: "@nutrition_4"
+    status: "validated"
+    image.name: "62dc40eaf1246959904447.jpg"
+    image.originalName: "62dc40eaf1246959904447.jpg"
+    image.mimeType: "image/jpg"
+    image.size: "19154"
+    image.dimensions: [ "251", "400" ]
+    imageIngredients.name: "62dc40eb59670942450812.jpg"
+    imageIngredients.originalName: "62dc40eb59670942450812.jpg"
+    imageIngredients.mimeType: "image/jpg"
+    imageIngredients.size: "12911"
+    imageIngredients.dimensions: [ "88", "400" ]
+    imageNutrition.name: "62dc40ebd03bc940736908.jpg"
+    imageNutrition.originalName: "62dc40ebd03bc940736908.jpg"
+    imageNutrition.mimeType: "image/jpg"
+    imageNutrition.size: "12137"
+    imageNutrition.dimensions: [ "400", "68" ]
+
+  product_5:
+    id: 5
+    ean: "8001505005707"
+    brand: "Rigoni di Asiago"
+    name: "Nocciolata"
+    status: "validated"
+    product_nutrition: "@nutrition_5"
+    image.name: "62dc40f55bf1f679527648.jpg"
+    image.originalName: "62dc40f55bf1f679527648.jpg"
+    image.mimeType: "image/jpg"
+    image.size: "19154"
+    image.dimensions: [ "251", "400" ]
+    imageIngredients.name: "62dc40f5d6049167865626.jpg"
+    imageIngredients.originalName: "62dc40f5d6049167865626.jpg"
+    imageIngredients.mimeType: "image/jpg"
+    imageIngredients.size: "12911"
+    imageIngredients.dimensions: [ "88", "400" ]
+    imageNutrition.name: "62dc40f65bf72230954857.jpg"
+    imageNutrition.originalName: "62dc40f65bf72230954857.jpg"
+    imageNutrition.mimeType: "image/jpg"
+    imageNutrition.size: "12137"
+    imageNutrition.dimensions: [ "400", "68" ]
+
+  product_6:
+    id: 6
+    ean: "7613035989535"
+    brand: "Herta"
+    status: "validated"
+    name: "Le Bon Paris à l'Étouffée Sans Nitrite 4 Tranches"
+    product_nutrition: "@nutrition_6"
+    image.name: "62dc4100d42c7191203783.jpg"
+    image.originalName: "62dc4100d42c7191203783.jpg"
+    image.mimeType: "image/jpg"
+    image.size: "19154"
+    image.dimensions: [ "251", "400" ]
+    imageIngredients.name: "62dc410156e27584705264.jpg"
+    imageIngredients.originalName: "62dc410156e27584705264.jpg"
+    imageIngredients.mimeType: "image/jpg"
+    imageIngredients.size: "12911"
+    imageIngredients.dimensions: [ "88", "400" ]
+    imageNutrition.name: "62dc4101c8b64701052544.jpg"
+    imageNutrition.originalName: "62dc4101c8b64701052544.jpg"
+    imageNutrition.mimeType: "image/jpg"
+    imageNutrition.size: "12137"
+    imageNutrition.dimensions: [ "400", "68" ]

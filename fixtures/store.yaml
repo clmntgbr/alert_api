@@ -1,0 +1,5 @@
+App\Entity\Store:
+  store_{1..10}:
+    name: <sentence(2)>
+    user: "@user_*"
+    isActive: false

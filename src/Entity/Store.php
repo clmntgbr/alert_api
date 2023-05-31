@@ -35,7 +35,7 @@ class Store
     private bool $isActive;
 
     #[ORM\Column(type: Types::INTEGER)]
-    private int $maxItemPerStore;
+    private int $maxItemPerStore = 100;
 
     #[ORM\ManyToOne(targetEntity: User::class, fetch: 'EAGER', inversedBy: 'stores')]
     #[Groups(['get_items'])]
@@ -46,6 +46,7 @@ class Store
 
     public function __construct()
     {
+        $this->maxItemPerStore = 100;
         $this->items = new ArrayCollection();
     }
 

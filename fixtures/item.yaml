@@ -1,0 +1,6 @@
+App\Entity\Item:
+  item_{1..200}:
+    product: "@product_*"
+    store: "@store_*"
+    isLiked: "<boolean(50)>"
+    expirationDate: "<dateTimeInInterval('- 15 days','+ 30 days')>"

@@ -1,0 +1,8 @@
+App\Entity\ProductNutrition:
+  nutrition_{1..6}:
+    ecoscoreGrade: <randomLetter()>
+    ecoscoreScore: <randomDigit()>
+    ingredientsText: <sentence(7)>
+    nutriscoreGrade: <randomLetter()>
+    nutriscoreScore: <randomDigit()>
+    quantity: <randomDigit()>

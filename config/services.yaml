@@ -1,16 +1,30 @@
 parameters:
-    openFoodFactsUrl: "%env(OPEN_FOOD_FACTS_URL)%"
+  openFoodFactsUrl: "%env(OPEN_FOOD_FACTS_URL)%"
+    maxItemPerStore: "%env(MAX_ITEM_PER_STORE)%"
 
 services:
-    _defaults:
+  _defaults:
         autowire: true
         autoconfigure: true
         bind:
-            string $openFoodFactsUrl: "%openFoodFactsUrl%"
+          string $openFoodFactsUrl: "%openFoodFactsUrl%"
+          int $maxItemPerStore: "%maxItemPerStore%"
 
-    App\:
-        resource: '../src/'
-        exclude:
-            - '../src/DependencyInjection/'
-            - '../src/Entity/'
-            - '../src/Kernel.php'
+  App\:
+    resource: '../src/'
+    exclude:
+      - '../src/DependencyInjection/'
+      - '../src/Entity/'
+      - '../src/Kernel.php'
+
+  App\Subscriber\UserSubscriber:
+    tags:
+      - { name: doctrine.event_subscriber, connection: default }
+
+  App\Subscriber\ItemSubscriber:
+    tags:
+      - { name: doctrine.event_subscriber, connection: default }
+
+  App\Subscriber\StoreSubscriber:
+    tags:
+      - { name: doctrine.event_subscriber, connection: default }

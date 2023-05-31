@@ -55,6 +55,15 @@ stop:
 
 restart: stop start
 
+## Init project
+init: install update drop create migrate migration migrate fixture npm-install npm-build jwt
+
+## Init project
+init-db: drop create migrate migration migrate fixture
+
+jwt:
+	$(PHP) bin/console lexik:jwt:generate-keypair
+
 ## Entering php shell
 php:
 	@$(DOCKER_COMPOSE) exec php sh
@@ -74,6 +83,32 @@ install:
 ## Composer update
 update:
 	$(PHP) composer update
+
+npm-install:
+	$(PHP) npm install
+
+npm-build:
+	$(PHP) npm run build
+
+## Drop database
+drop:
+	$(PHP) bin/console doctrine:database:drop --if-exists --force
+
+## Load fixtures
+fixture:
+	$(PHP) bin/console hautelook:fixtures:load --env=dev --no-interaction
+
+## Create database
+create:
+	$(PHP) bin/console doctrine:database:create --if-not-exists
+
+## Making migration file
+migration:
+	$(PHP) bin/console make:migration
+
+## Applying migration
+migrate:
+	$(PHP) bin/console doctrine:migration:migrate --no-interaction
 
 ## QA
 cs-fixer:

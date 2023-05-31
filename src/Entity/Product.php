@@ -2,12 +2,12 @@
 
 namespace App\Entity;
 
+
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\ApiResource\PostProductByEan;
 use App\Repository\ProductRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Blameable\Traits\BlameableEntity;
-use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Entity\File as EmbeddedFile;
@@ -16,13 +16,23 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource(
     collectionOperations: [],
-    itemOperations: [],
+    itemOperations: [
+        'get' => ['normalization_context' => ['skip_null_values' => false, 'groups' => ['get_product']]],
+        'post_products' => [
+            'method' => 'POST',
+            'path' => '/products',
+            'controller' => PostProductByEan::class,
+            'read' => false,
+            'normalization_context' => ['skip_null_values' => false, 'groups' => ['get_product']],
+        ],
+    ],
 )]
 #[Vich\Uploadable]
 class Product
 {
-    use TimestampableEntity;
-    use BlameableEntity;
+    public const WAITING_VALIDATION = 'waiting_validation';
+    public const VALIDATED = 'validated';
+    public const NOT_FOUND = 'not_found';
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -60,7 +70,7 @@ class Product
 
     #[ORM\ManyToOne(targetEntity: ProductNutrition::class, cascade: ['persist', 'remove'], fetch: 'LAZY')]
     #[Groups(['get_product'])]
-    private ProductNutrition $nutrition;
+    private ProductNutrition $productNutrition;
 
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $statuses;
@@ -137,43 +147,52 @@ class Product
         return $this;
     }
 
-    public function initStatuses(array $status): self
+    public function setInitStatuses(array $status): self
     {
         $this->statuses = $status;
 
         return $this;
     }
 
-    public function getImage(): \Vich\UploaderBundle\Entity\File
+    public function getPreviousStatus(): ?string
+    {
+        if (count($this->statuses) <= 1) {
+            return end($this->statuses);
+        }
+
+        return $this->statuses[count($this->statuses) - 2];
+    }
+
+    public function getImage(): EmbeddedFile
     {
         return $this->image;
     }
 
-    public function setImage(\Vich\UploaderBundle\Entity\File $image): self
+    public function setImage(EmbeddedFile $image): self
     {
         $this->image = $image;
 
         return $this;
     }
 
-    public function getImageIngredients(): \Vich\UploaderBundle\Entity\File
+    public function getImageIngredients(): EmbeddedFile
     {
         return $this->imageIngredients;
     }
 
-    public function setImageIngredients(\Vich\UploaderBundle\Entity\File $imageIngredients): self
+    public function setImageIngredients(EmbeddedFile $imageIngredients): self
     {
         $this->imageIngredients = $imageIngredients;
 
         return $this;
     }
 
-    public function getImageNutrition(): \Vich\UploaderBundle\Entity\File
+    public function getImageNutrition(): EmbeddedFile
     {
         return $this->imageNutrition;
     }
 
-    public function setImageNutrition(\Vich\UploaderBundle\Entity\File $imageNutrition): self
+    public function setImageNutrition(EmbeddedFile $imageNutrition): self
     {
         $this->imageNutrition = $imageNutrition;
 
@@ -185,6 +204,13 @@ class Product
         return $this->id;
     }
 
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function getEan(): ?string
     {
         return $this->ean;
@@ -193,6 +219,54 @@ class Product
     public function setEan(string $ean): self
     {
         $this->ean = $ean;
+
+        return $this;
+    }
+
+    public function getImageIngredientsFile(): ?File
+    {
+        return $this->imageIngredientsFile;
+    }
+
+    public function setImageIngredientsFile(?File $imageFile = null): self
+    {
+        $this->imageIngredientsFile = $imageFile;
+
+        if (null !== $imageFile) {
+            $this->updatedAt = new \DateTime();
+        }
+
+        return $this;
+    }
+
+    public function getImageNutritionFile(): ?File
+    {
+        return $this->imageNutritionFile;
+    }
+
+    public function setImageNutritionFile(?File $imageFile = null): self
+    {
+        $this->imageNutritionFile = $imageFile;
+
+        if (null !== $imageFile) {
+            $this->updatedAt = new \DateTime();
+        }
+
+        return $this;
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageFile(?File $imageFile = null): self
+    {
+        $this->imageFile = $imageFile;
+
+        if (null !== $imageFile) {
+            $this->updatedAt = new \DateTime();
+        }
 
         return $this;
     }
@@ -217,6 +291,31 @@ class Product
     public function setBrand(?string $brand): self
     {
         $this->brand = $brand;
+
+        return $this;
+    }
+
+    public function getCategories(): ?string
+    {
+        return $this->categories;
+    }
+
+    public function setCategories(?string $categories): self
+    {
+        $this->categories = $categories;
+
+        return $this;
+    }
+
+    public function getProductNutrition(): ?ProductNutrition
+
+    {
+        return $this->productNutrition;
+    }
+
+    public function setProductNutrition(?ProductNutrition $nutrition): self
+    {
+        $this->productNutrition = $nutrition;
 
         return $this;
     }
@@ -253,30 +352,6 @@ class Product
     public function setOrigin(?string $origin): self
     {
         $this->origin = $origin;
-
-        return $this;
-    }
-
-    public function getCategories(): ?string
-    {
-        return $this->categories;
-    }
-
-    public function setCategories(?string $categories): self
-    {
-        $this->categories = $categories;
-
-        return $this;
-    }
-
-    public function getNutrition(): ?ProductNutrition
-    {
-        return $this->nutrition;
-    }
-
-    public function setNutrition(?ProductNutrition $nutrition): self
-    {
-        $this->nutrition = $nutrition;
 
         return $this;
     }

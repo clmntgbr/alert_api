@@ -72,7 +72,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $plainPassword = null;
 
     #[ORM\Column(type: Types::BOOLEAN)]
-    #[Groups(['read_user'])]
     private $isVerified = false;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Store::class, cascade: ['persist', 'remove'])]
@@ -275,6 +274,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    public function getActiveStore(): Store|bool
+    {
+        return $this->getStores()->filter(
+            function (Store $store) {
+                return true === $store->isIsActive();
+            }
+        )->first();
+    }
+
     /**
      * @return Collection<int, Store>
      */
@@ -295,12 +303,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function removeStore(Store $store): self
     {
-        if ($this->stores->removeElement($store)) {
-            // set the owning side to null (unless already changed)
-            if ($store->getUser() === $this) {
-                $store->setUser(null);
-            }
-        }
+        $this->stores->removeElement($store);
 
         return $this;
     }
