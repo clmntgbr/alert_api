@@ -6,6 +6,7 @@ use App\Entity\Product;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ArrayField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CodeEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\FormField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
@@ -82,7 +83,7 @@ class ProductCrudController extends AbstractCrudController
             ArrayField::new('imageNutrition.dimensions', 'Dimensions')->setDisabled()->hideOnIndex(),
 
             FormField::addPanel('Json fields'),
-//            CodeEditorField::new('response')->hideOnIndex()->setDisabled()->setLabel('Response'),
+            CodeEditorField::new('responseAdmin')->hideOnIndex()->setDisabled()->setLabel('Response'),
         ];
     }
 }

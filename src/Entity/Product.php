@@ -34,6 +34,9 @@ class Product
     public const VALIDATED = 'validated';
     public const NOT_FOUND = 'not_found';
 
+    #[Groups(['post_product'])]
+    private string $geography = 'world';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]
@@ -369,5 +372,26 @@ class Product
         $this->response = $response;
 
         return $this;
+    }
+
+    public function getResponseAdmin()
+    {
+        return json_encode($this->response, JSON_PRETTY_PRINT);
+    }
+
+    /**
+     * @return string
+     */
+    public function getGeography(): string
+    {
+        return $this->geography;
+    }
+
+    /**
+     * @param string $geography
+     */
+    public function setGeography(string $geography): void
+    {
+        $this->geography = $geography;
     }
 }

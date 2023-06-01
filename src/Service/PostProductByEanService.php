@@ -23,7 +23,7 @@ class PostProductByEanService
      * @throws \HttpException
      * @throws JsonException
      */
-    public function find(?string $ean): Product
+    public function find(?string $ean, string $geography): Product
     {
         if (null === $ean) {
             throw new \HttpException('Ean should\'nt be null.', 404);
@@ -35,7 +35,7 @@ class PostProductByEanService
             return $product;
         }
 
-        $response = $this->openFoodFactApi->getProduct($ean);
+        $response = $this->openFoodFactApi->getProduct($ean, $geography);
         $product = new Product();
         $product->setResponse($response);
 

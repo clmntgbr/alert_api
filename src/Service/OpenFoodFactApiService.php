@@ -18,9 +18,9 @@ class OpenFoodFactApiService
     /**
      * @throws JsonException
      */
-    public function getProduct(?string $ean)
+    public function getProduct(?string $ean, string $geography)
     {
-        $response = file_get_contents(sprintf($this->openFoodFactsUrl, $ean));
+        $response = file_get_contents(sprintf($this->openFoodFactsUrl, $geography, $ean));
         return Safe\json_decode($response, true);
     }
 

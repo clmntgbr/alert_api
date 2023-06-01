@@ -26,7 +26,7 @@ class PostProductByEan extends AbstractController
         $product = $request->attributes->get('data');
 
         if ($product instanceof Product) {
-            return $this->productByEanService->find($product->getEan());
+            return $this->productByEanService->find($product->getEan(), $product->getGeography());
         }
 
         throw new \HttpException('Ean should\'nt be null.', 404);
