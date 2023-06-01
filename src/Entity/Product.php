@@ -2,7 +2,6 @@
 
 namespace App\Entity;
 
-
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\ApiResource\PostProductByEan;
 use App\Repository\ProductRepository;
@@ -24,6 +23,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             'controller' => PostProductByEan::class,
             'read' => false,
             'normalization_context' => ['skip_null_values' => false, 'groups' => ['get_product']],
+            'denormalization_context' => ['skip_null_values' => false, 'groups' => ['post_product']],
         ],
     ],
 )]
@@ -41,7 +41,7 @@ class Product
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, unique: true)]
-    #[Groups(['get_product'])]
+    #[Groups(['get_product', 'post_product'])]
     private string $ean;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
@@ -64,7 +64,7 @@ class Product
     #[Groups(['get_items', 'get_product'])]
     private ?string $origin;
 
-    #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     #[Groups(['get_items', 'get_product'])]
     private ?string $categories;
 
@@ -78,6 +78,9 @@ class Product
     #[ORM\Column(type: Types::STRING, nullable: true)]
     #[Groups(['get_product'])]
     private ?string $status;
+
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private ?array $response;
 
     #[Vich\UploadableField(mapping: 'product_image', fileNameProperty: 'image.name', size: 'image.size', mimeType: 'image.mimeType', originalName: 'image.originalName', dimensions: 'image.dimensions')]
     private ?File $imageFile = null;
@@ -352,6 +355,18 @@ class Product
     public function setOrigin(?string $origin): self
     {
         $this->origin = $origin;
+
+        return $this;
+    }
+
+    public function getResponse(): array
+    {
+        return $this->response;
+    }
+
+    public function setResponse(?array $response): self
+    {
+        $this->response = $response;
 
         return $this;
     }

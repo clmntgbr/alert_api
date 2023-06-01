@@ -17,6 +17,9 @@ class PostProductByEan extends AbstractController
     {
     }
 
+    /**
+     * @throws \HttpException
+     */
     public function __invoke(Request $request, Product $data): Product
     {
         /** @var Product $product */

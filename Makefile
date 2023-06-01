@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-PROJECT_NAME = alerts
+PROJECT_NAME = alert
 
 DOCKER_COMPOSE = docker-compose -p $(PROJECT_NAME)
 
@@ -46,7 +46,7 @@ init: install update
 ## Start containers
 start:
 	@$(DOCKER_COMPOSE) up -d
-	@echo "site is available here: https://$(PROJECT_NAME).traefik.me"
+	@echo "site is available here: 'https://$(PROJECT_NAME).traefik.me'"
 	@echo "admin is available here: https://$(PROJECT_NAME).traefik.me/admin"
 
 ## Stop containers

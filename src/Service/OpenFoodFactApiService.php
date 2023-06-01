@@ -26,12 +26,12 @@ class OpenFoodFactApiService
 
     public function getOpenFoodFactProductCategories(array $response): ?string
     {
-        if (array_key_exists('categories_old', $response['product'])) {
-            return $response['product']['categories_old'];
-        }
-
         if (array_key_exists('categories', $response['product'])) {
             return $response['product']['categories'];
+        }
+
+        if (array_key_exists('categories_old', $response['product'])) {
+            return $response['product']['categories_old'];
         }
 
         return null;

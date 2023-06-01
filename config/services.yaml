@@ -1,6 +1,6 @@
 parameters:
   openFoodFactsUrl: "%env(OPEN_FOOD_FACTS_URL)%"
-    maxItemPerStore: "%env(MAX_ITEM_PER_STORE)%"
+  maxItemPerStore: "%env(MAX_ITEM_PER_STORE)%"
 
 services:
   _defaults:
@@ -16,6 +16,9 @@ services:
       - '../src/DependencyInjection/'
       - '../src/Entity/'
       - '../src/Kernel.php'
+
+  App\Decorator\JwtDecorator:
+    decorates: "api_platform.openapi.factory"
 
   App\Subscriber\UserSubscriber:
     tags:

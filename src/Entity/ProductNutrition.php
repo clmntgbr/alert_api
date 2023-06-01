@@ -12,6 +12,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProductNutritionRepository::class)]
 #[ApiResource(
+    collectionOperations: [],
     itemOperations: ['get'],
 )]
 class ProductNutrition

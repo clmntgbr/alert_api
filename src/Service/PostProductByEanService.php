@@ -7,6 +7,7 @@ use App\Entity\Product;
 use App\Entity\ProductNutrition;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Safe\Exceptions\JsonException;
 
 class PostProductByEanService
 {
@@ -18,6 +19,10 @@ class PostProductByEanService
     {
     }
 
+    /**
+     * @throws \HttpException
+     * @throws JsonException
+     */
     public function find(?string $ean): Product
     {
         if (null === $ean) {
@@ -31,15 +36,17 @@ class PostProductByEanService
         }
 
         $response = $this->openFoodFactApi->getProduct($ean);
+        $product = new Product();
+        $product->setResponse($response);
 
         if (isset($response['status_verbose']) && in_array($response['status_verbose'], ['no code or invalid code', 'product not found'])) {
-            return $this->createUnfoundedProduct($ean);
+            return $this->createUnfoundedProduct($ean, $product);
         }
 
-        return $this->createFoundedProduct($response);
+        return $this->createFoundedProduct($response, $product);
     }
 
-    private function createFoundedProduct(array $response): Product
+    private function createFoundedProduct(array $response, Product $product): Product
     {
         $nutrition = new ProductNutrition();
 
@@ -51,7 +58,6 @@ class PostProductByEanService
             ->setQuantity($response['product']['quantity'] ?? null)
             ->setIngredientsText($this->openFoodFactApi->getOpenFoodFactProductNutritionIngredients($response));
 
-        $product = new Product();
         $product
             ->setEan($response['code'])
             ->setLink($this->openFoodFactApi->getOpenFoodFactProductLink($response))
@@ -84,9 +90,8 @@ class PostProductByEanService
         return $product;
     }
 
-    private function createUnfoundedProduct(string $ean): Product
+    private function createUnfoundedProduct(string $ean, Product $product): Product
     {
-        $product = new Product();
         $product
             ->setEan($ean)
             ->setProductNutrition(new ProductNutrition())

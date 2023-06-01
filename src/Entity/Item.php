@@ -18,7 +18,7 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 #[ORM\Entity(repositoryClass: ItemRepository::class)]
 #[ApiResource(
     collectionOperations: ['get', 'post'],
-    itemOperations: ['get', 'patch' => ['denormalization_context' => ['groups' => ['patch_items']]], 'delete'],
+    itemOperations: ['get', 'patch' => ['denormalization_context' => ['groups' => ['patch_item']]], 'delete'],
     normalizationContext: ['groups' => ['get_items']],
     order: ['expirationDate' => 'ASC'],
 )]
@@ -37,11 +37,11 @@ class Item
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     #[Context([DateTimeNormalizer::FORMAT_KEY => 'd/m/Y'])]
-    #[Groups(['get_items', 'patch_items'])]
+    #[Groups(['get_items', 'patch_item'])]
     private ?\DateTimeInterface $expirationDate;
 
     #[ORM\Column(type: Types::BOOLEAN)]
-    #[Groups(['get_items', 'patch_items'])]
+    #[Groups(['get_items', 'patch_item'])]
     private bool $isLiked;
 
     #[ORM\ManyToOne(targetEntity: Product::class, fetch: 'EXTRA_LAZY')]

@@ -80,6 +80,9 @@ class ProductCrudController extends AbstractCrudController
             NumberField::new('imageNutrition.size', 'Size')->setDisabled()->hideOnIndex(),
             TextField::new('imageNutrition.mimeType', 'mimeType')->setDisabled()->hideOnIndex(),
             ArrayField::new('imageNutrition.dimensions', 'Dimensions')->setDisabled()->hideOnIndex(),
+
+            FormField::addPanel('Json fields'),
+//            CodeEditorField::new('response')->hideOnIndex()->setDisabled()->setLabel('Response'),
         ];
     }
 }
