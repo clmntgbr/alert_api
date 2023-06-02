@@ -1,0 +1,5 @@
+#App\Entity\Notification:
+#  notification_{1..100}:
+#    user: "@user_*"
+#    status: "UNREAD"
+#    setInitStatuses: ["PENDING", "UNREAD"]

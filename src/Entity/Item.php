@@ -8,6 +8,8 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use App\Repository\ItemRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
@@ -55,6 +57,21 @@ class Item
     #[ORM\ManyToOne(targetEntity: Store::class, fetch: 'EAGER', inversedBy: 'items')]
     #[Groups(['get_items'])]
     private Store $store;
+
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private ?array $statuses;
+
+    #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Groups(['get_items', 'patch_item'])]
+    private ?string $status;
+
+    #[ORM\ManyToMany(targetEntity: Notification::class, mappedBy: 'items')]
+    private Collection $notifications;
+
+    public function __construct()
+    {
+        $this->notifications = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -117,6 +134,74 @@ class Item
     public function setQuantity(int $quantity): self
     {
         $this->quantity = $quantity;
+
+        return $this;
+    }
+
+    public function getStatus(): string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
+        $this->setStatuses($status);
+
+        return $this;
+    }
+
+    public function getStatuses(): ?array
+    {
+        return $this->statuses;
+    }
+
+    public function setStatuses(string $status): self
+    {
+        $this->statuses[] = $status;
+
+        return $this;
+    }
+
+    public function setInitStatuses(array $status): self
+    {
+        $this->statuses = $status;
+
+        return $this;
+    }
+
+    public function getPreviousStatus(): ?string
+    {
+        if (count($this->statuses) <= 1) {
+            return end($this->statuses);
+        }
+
+        return $this->statuses[count($this->statuses) - 2];
+    }
+
+    /**
+     * @return Collection<int, Notification>
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): self
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications->add($notification);
+            $notification->addItem($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): self
+    {
+        if ($this->notifications->removeElement($notification)) {
+            $notification->removeItem($this);
+        }
 
         return $this;
     }

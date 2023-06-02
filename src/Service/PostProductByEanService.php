@@ -67,7 +67,7 @@ class PostProductByEanService
             ->setBrand($response['product']['brands'])
             ->setCategories($this->openFoodFactApi->getOpenFoodFactProductCategories($response))
             ->setProductNutrition($nutrition)
-            ->setStatus(Product::WAITING_VALIDATION);
+            ->setStatus(Product::PENDING);
 
         $file = $this->openFoodFactApi->getOpenFoodFactProductImage($response['product']['image_url'] ?? null);
         if (null !== $file) {

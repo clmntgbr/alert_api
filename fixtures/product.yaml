@@ -6,7 +6,8 @@ App\Entity\Product:
     name: "Pâte à tartiner Nutella noisettes et cacao - 1kg"
     categories: "snack, chocolat"
     product_nutrition: "@nutrition_1"
-    status: "validated"
+    status: "ACTIVE"
+    setInitStatuses: ["PENDING", "APPROVED", "ACTIVE"]
     image.name: "62dc40bc23dae511387391.jpg"
     image.originalName: "62dc40bc23dae511387391.jpg"
     image.mimeType: "image/jpg"
@@ -30,7 +31,8 @@ App\Entity\Product:
     categories: "snack, chocolat"
     name: "Biscuits Nutella Biscuits x22 biscuits fourrés - 304g"
     product_nutrition: "@nutrition_2"
-    status: "validated"
+    status: "ACTIVE"
+    setInitStatuses: ["PENDING", "APPROVED", "ACTIVE"]
     image.name: "62dc40d321c8b809318808.jpg"
     image.originalName: "62dc40d321c8b809318808.jpg"
     image.mimeType: "image/jpg"
@@ -53,7 +55,8 @@ App\Entity\Product:
     brand: "Bjorg"
     categories: "snack, chocolat"
     name: "Muesli Raisin, Figue, Abricot"
-    status: "validated"
+    status: "ACTIVE"
+    setInitStatuses: ["PENDING", "APPROVED", "ACTIVE"]
     product_nutrition: "@nutrition_3"
     image.name: "62dc40de2dd32850154612.jpg"
     image.originalName: "62dc40de2dd32850154612.jpg"
@@ -77,7 +80,8 @@ App\Entity\Product:
     brand: "Heudebert"
     name: "Biscottes 6 Céréales"
     product_nutrition: "@nutrition_4"
-    status: "validated"
+    status: "ACTIVE"
+    setInitStatuses: ["PENDING", "APPROVED", "ACTIVE"]
     image.name: "62dc40eaf1246959904447.jpg"
     image.originalName: "62dc40eaf1246959904447.jpg"
     image.mimeType: "image/jpg"
@@ -99,7 +103,8 @@ App\Entity\Product:
     ean: "8001505005707"
     brand: "Rigoni di Asiago"
     name: "Nocciolata"
-    status: "validated"
+    status: "ACTIVE"
+    setInitStatuses: ["PENDING", "APPROVED", "ACTIVE"]
     product_nutrition: "@nutrition_5"
     image.name: "62dc40f55bf1f679527648.jpg"
     image.originalName: "62dc40f55bf1f679527648.jpg"
@@ -121,7 +126,8 @@ App\Entity\Product:
     id: 6
     ean: "7613035989535"
     brand: "Herta"
-    status: "validated"
+    status: "ACTIVE"
+    setInitStatuses: ["PENDING", "APPROVED", "ACTIVE"]
     name: "Le Bon Paris à l'Étouffée Sans Nitrite 4 Tranches"
     product_nutrition: "@nutrition_6"
     image.name: "62dc4100d42c7191203783.jpg"

@@ -78,12 +78,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['read_user'])]
     private Collection $stores;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: UserNotificationTimer::class, cascade: ['persist', 'remove'])]
+    #[Groups(['read_user'])]
+    private Collection $userNotificationTimers;
+
     public function __construct()
     {
         $this->image = new EmbeddedFile();
         $this->id = rand();
         $this->isEnable = false;
         $this->stores = new ArrayCollection();
+        $this->userNotificationTimers = new ArrayCollection();
     }
 
     #[Groups(['read_user'])]
@@ -304,6 +309,36 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeStore(Store $store): self
     {
         $this->stores->removeElement($store);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserNotificationTimer>
+     */
+    public function getUserNotificationTimers(): Collection
+    {
+        return $this->userNotificationTimers;
+    }
+
+    public function addUserNotificationTimer(UserNotificationTimer $userNotificationTimer): self
+    {
+        if (!$this->userNotificationTimers->contains($userNotificationTimer)) {
+            $this->userNotificationTimers->add($userNotificationTimer);
+            $userNotificationTimer->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserNotificationTimer(UserNotificationTimer $userNotificationTimer): self
+    {
+        if ($this->userNotificationTimers->removeElement($userNotificationTimer)) {
+            // set the owning side to null (unless already changed)
+            if ($userNotificationTimer->getUser() === $this) {
+                $userNotificationTimer->setUser(null);
+            }
+        }
 
         return $this;
     }

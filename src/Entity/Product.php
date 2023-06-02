@@ -7,6 +7,7 @@ use App\ApiResource\PostProductByEan;
 use App\Repository\ProductRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Entity\File as EmbeddedFile;
@@ -30,9 +31,14 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 #[Vich\Uploadable]
 class Product
 {
-    public const WAITING_VALIDATION = 'waiting_validation';
-    public const VALIDATED = 'validated';
-    public const NOT_FOUND = 'not_found';
+    use TimestampableEntity;
+
+    public const ACTIVE = 'ACTIVE';
+    public const INACTIVE = 'INACTIVE';
+    public const PENDING = 'PENDING';
+    public const APPROVED = 'APPROVED';
+    public const DISAPPROVED = 'DISAPPROVED';
+    public const NOT_FOUND = 'NOT_FOUND';
 
     #[Groups(['post_product'])]
     private string $geography = 'world';
