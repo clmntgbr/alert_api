@@ -64,6 +64,9 @@ init-db: drop create migrate migration migrate fixture
 jwt:
 	$(PHP) bin/console lexik:jwt:generate-keypair
 
+cache:
+	$(PHP) rm -r var/cache
+
 ## Entering php shell
 php:
 	@$(DOCKER_COMPOSE) exec php sh
