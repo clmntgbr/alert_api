@@ -2,9 +2,11 @@
 
 namespace App\Command;
 
+use App\Entity\Item;
 use App\Entity\Notification;
 use App\Entity\User;
 use App\Repository\ItemRepository;
+use App\Repository\NotificationRepository;
 use App\Repository\UserNotificationTimerRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -22,6 +24,7 @@ class CreateNotificationsCommand extends Command
     public function __construct(
         private readonly UserNotificationTimerRepository $userNotificationTimerRepository,
         private readonly ItemRepository $itemRepository,
+        private readonly NotificationRepository $notificationRepository,
         private readonly EntityManagerInterface $em,
         string $name = null
     ) {
@@ -46,6 +49,7 @@ class CreateNotificationsCommand extends Command
             $items = $this->itemRepository->findItemsByStoreAndExpireDate($timer->getUser(), $timer->getValueBeforeNotificationInHours());
             $notification = $this->createNotification($timer->getUser());
             foreach ($items as $item) {
+                dd($this->findNotification($item, $notification));
                 $notification->addItem($item);
             }
             $this->em->persist($notification);
@@ -69,5 +73,12 @@ class CreateNotificationsCommand extends Command
         $this->em->flush();
 
         return $notification;
+    }
+
+    private function findNotification(Item $item, Notification $notification)
+    {
+        return $item->getNotifications()->filter(function(Notification $entity) use ($notification) {
+            return $notification->getId() === $entity->getId();
+        });
     }
 }
