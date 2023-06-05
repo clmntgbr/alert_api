@@ -42,6 +42,10 @@ class Notification
     #[Groups(['patch_notification', 'get_notification'])]
     private string $type = 'item';
 
+    #[ORM\Column(type: Types::STRING)]
+    #[Groups(['patch_notification', 'get_notification'])]
+    private string $timer = 'P0DT24H';
+
     #[ORM\Column(type: Types::STRING, nullable: true)]
     #[Groups(['patch_notification', 'get_notification'])]
     private ?string $status;
@@ -145,6 +149,18 @@ class Notification
     public function removeItem(Item $item): self
     {
         $this->items->removeElement($item);
+
+        return $this;
+    }
+
+    public function getTimer(): ?string
+    {
+        return $this->timer;
+    }
+
+    public function setTimer(string $timer): self
+    {
+        $this->timer = $timer;
 
         return $this;
     }

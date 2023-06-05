@@ -5,6 +5,7 @@ namespace App\Command;
 use App\Entity\Item;
 use App\Entity\Notification;
 use App\Entity\User;
+use App\Entity\UserNotificationTimer;
 use App\Repository\ItemRepository;
 use App\Repository\NotificationRepository;
 use App\Repository\UserNotificationTimerRepository;
@@ -47,11 +48,22 @@ class CreateNotificationsCommand extends Command
 
         foreach ($timers as $timer) {
             $items = $this->itemRepository->findItemsByStoreAndExpireDate($timer->getUser(), $timer->getValueBeforeNotificationInHours());
-            $notification = $this->createNotification($timer->getUser());
+            if (count($items) <= 0) {
+                continue;
+            }
+
+            $notification = $this->createNotification($timer->getUser(), $timer);
             foreach ($items as $item) {
-                dd($this->findNotification($item, $notification));
+                if ($this->findNotificationAndItem($item, $timer)) {
+                    continue;
+                }
                 $notification->addItem($item);
             }
+
+            if ($notification->getItems()->count() <= 0) {
+                continue;
+            }
+
             $this->em->persist($notification);
             $this->em->flush();
         }
@@ -59,26 +71,30 @@ class CreateNotificationsCommand extends Command
         return Command::SUCCESS;
     }
 
-    private function createNotification(User $user): Notification
+    private function createNotification(User $user, UserNotificationTimer $timer): Notification
     {
         $notification = new Notification();
         $notification
             ->setStatus(Notification::PENDING)
             ->setInitStatuses([Notification::PENDING])
             ->setUser($user)
+            ->setTimer($timer->getValueBeforeNotificationInHours())
             ->setType('item')
         ;
-
-        $this->em->persist($notification);
-        $this->em->flush();
 
         return $notification;
     }
 
-    private function findNotification(Item $item, Notification $notification)
+    private function findNotificationAndItem(Item $item, UserNotificationTimer $timer): bool
     {
-        return $item->getNotifications()->filter(function(Notification $entity) use ($notification) {
-            return $notification->getId() === $entity->getId();
+        $notification = $item->getNotifications()->filter(function (Notification $notification) use ($item, $timer) {
+            return $notification->getTimer() === $timer->getValueBeforeNotificationInHours();
         });
+
+        if ($notification->count() > 0) {
+            return true;
+        }
+
+        return false;
     }
 }
