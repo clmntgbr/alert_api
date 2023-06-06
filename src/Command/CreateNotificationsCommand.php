@@ -7,7 +7,6 @@ use App\Entity\Notification;
 use App\Entity\User;
 use App\Entity\UserNotificationTimer;
 use App\Repository\ItemRepository;
-use App\Repository\NotificationRepository;
 use App\Repository\UserNotificationTimerRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -18,14 +17,13 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
     name: 'app:create-notifications',
-    description: 'Add a short description for your command',
+    description: 'Creating notification to send',
 )]
 class CreateNotificationsCommand extends Command
 {
     public function __construct(
         private readonly UserNotificationTimerRepository $userNotificationTimerRepository,
         private readonly ItemRepository $itemRepository,
-        private readonly NotificationRepository $notificationRepository,
         private readonly EntityManagerInterface $em,
         string $name = null
     ) {
