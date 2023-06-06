@@ -2,7 +2,6 @@
 
 namespace App\Admin\Controller;
 
-use App\Entity\Nutrition;
 use App\Entity\ProductNutrition;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 

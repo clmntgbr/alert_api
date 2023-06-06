@@ -240,7 +240,7 @@ class Product
         return $this->imageIngredientsFile;
     }
 
-    public function setImageIngredientsFile(?File $imageFile = null): self
+    public function setImageIngredientsFile(File $imageFile = null): self
     {
         $this->imageIngredientsFile = $imageFile;
 
@@ -256,7 +256,7 @@ class Product
         return $this->imageNutritionFile;
     }
 
-    public function setImageNutritionFile(?File $imageFile = null): self
+    public function setImageNutritionFile(File $imageFile = null): self
     {
         $this->imageNutritionFile = $imageFile;
 
@@ -272,7 +272,7 @@ class Product
         return $this->imageFile;
     }
 
-    public function setImageFile(?File $imageFile = null): self
+    public function setImageFile(File $imageFile = null): self
     {
         $this->imageFile = $imageFile;
 
@@ -320,7 +320,6 @@ class Product
     }
 
     public function getProductNutrition(): ?ProductNutrition
-
     {
         return $this->productNutrition;
     }
@@ -385,17 +384,11 @@ class Product
         return json_encode($this->response, JSON_PRETTY_PRINT);
     }
 
-    /**
-     * @return string
-     */
     public function getGeography(): string
     {
         return $this->geography;
     }
 
-    /**
-     * @param string $geography
-     */
     public function setGeography(string $geography): void
     {
         $this->geography = $geography;

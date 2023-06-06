@@ -2,13 +2,6 @@
 
 namespace App\Admin\Controller;
 
-use App\Entity\Address;
-use App\Entity\Currency;
-use App\Entity\GasPrice;
-use App\Entity\GasService;
-use App\Entity\GasStation;
-use App\Entity\GasType;
-use App\Entity\GooglePlace;
 use App\Entity\Item;
 use App\Entity\Product;
 use App\Entity\ProductNutrition;

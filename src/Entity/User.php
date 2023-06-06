@@ -177,7 +177,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getUserIdentifier(): string
     {
-        return (string)$this->email;
+        return (string) $this->email;
     }
 
     public function getEmail(): string
@@ -256,7 +256,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->imageFile;
     }
 
-    public function setImageFile(?File $imageFile = null): self
+    public function setImageFile(File $imageFile = null): self
     {
         $this->imageFile = $imageFile;
 

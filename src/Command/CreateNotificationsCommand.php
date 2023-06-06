@@ -34,7 +34,6 @@ class CreateNotificationsCommand extends Command
 
     protected function configure(): void
     {
-        $this;
     }
 
     /**
@@ -87,7 +86,7 @@ class CreateNotificationsCommand extends Command
 
     private function findNotificationAndItem(Item $item, UserNotificationTimer $timer): bool
     {
-        $notification = $item->getNotifications()->filter(function (Notification $notification) use ($item, $timer) {
+        $notification = $item->getNotifications()->filter(function (Notification $notification) use ($timer) {
             return $notification->getTimer() === $timer->getValueBeforeNotificationInHours();
         });
 

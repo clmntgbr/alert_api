@@ -13,8 +13,7 @@ class PostProductByEan extends AbstractController
 {
     public function __construct(
         private readonly PostProductByEanService $productByEanService
-    )
-    {
+    ) {
     }
 
     /**

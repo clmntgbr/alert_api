@@ -13,6 +13,7 @@ class HomeController extends AbstractController
     public function index(ProductRepository $productRepository): Response
     {
         dd($productRepository->findOneBy(['id' => 11]));
+
         return $this->render('Home/index.html.twig', [
         ]);
     }

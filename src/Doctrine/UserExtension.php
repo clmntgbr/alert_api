@@ -15,8 +15,7 @@ final class UserExtension implements QueryCollectionExtensionInterface, QueryIte
 {
     public function __construct(
         private readonly Security $security
-    )
-    {
+    ) {
     }
 
     public function applyToCollection(QueryBuilder $queryBuilder, QueryNameGeneratorInterface $queryNameGenerator, string $resourceClass, Operation $operation = null, array $context = []): void

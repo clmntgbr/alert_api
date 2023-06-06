@@ -42,6 +42,7 @@ class ItemRepository extends ServiceEntityRepository
 
     /**
      * @return Item[] Returns an array of Item objects
+     *
      * @throws \Exception
      */
     public function findItemsByStoreAndExpireDate(User $user, string $timer): array
@@ -54,7 +55,7 @@ class ItemRepository extends ServiceEntityRepository
             ->setParameters([
                 'date1' => sprintf('%s 00:00:00', $date->format('Y-m-d')),
                 'date2' => sprintf('%s 23:59:00', $date->format('Y-m-d')),
-                'stores' => $user->getStores()
+                'stores' => $user->getStores(),
             ])
             ->orderBy('i.id', 'ASC')
             ->getQuery()

@@ -24,9 +24,9 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
     normalizationContext: ['groups' => ['get_items', 'get_product']],
     order: ['expirationDate' => 'ASC'],
 )]
-#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'product.name' => 'partial',])]
-#[ApiFilter(OrderFilter::class, properties: ['expirationDate',])]
-#[ApiFilter(BooleanFilter::class, properties: ['isLiked',])]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'product.name' => 'partial'])]
+#[ApiFilter(OrderFilter::class, properties: ['expirationDate'])]
+#[ApiFilter(BooleanFilter::class, properties: ['isLiked'])]
 class Item
 {
     use TimestampableEntity;

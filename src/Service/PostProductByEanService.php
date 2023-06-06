@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-use App\Entity\Nutrition;
 use App\Entity\Product;
 use App\Entity\ProductNutrition;
 use App\Repository\ProductRepository;
@@ -12,11 +11,10 @@ use Safe\Exceptions\JsonException;
 class PostProductByEanService
 {
     public function __construct(
-        private readonly ProductRepository      $productRepository,
+        private readonly ProductRepository $productRepository,
         private readonly OpenFoodFactApiService $openFoodFactApi,
         private readonly EntityManagerInterface $em
-    )
-    {
+    ) {
     }
 
     /**
