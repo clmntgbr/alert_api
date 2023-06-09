@@ -20,7 +20,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: UserRepository::class), UniqueEntity('email', 'username')]
 #[ApiResource(
-    collectionOperations: ['get', 'post'],
+    collectionOperations: ['get', 'post' => ['denormalization_context' => ['groups' => ['post_user']]]],
     itemOperations: ['get', 'delete', 'put'],
     denormalizationContext: [
         'skip_null_values' => false,
@@ -42,7 +42,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id;
 
     #[ORM\Column(type: Types::STRING, length: 200, unique: true)]
-    #[Groups(['read_user'])]
+    #[Groups(['read_user', 'post_user'])]
     private string $email;
 
     #[ORM\Column(type: Types::STRING, length: 200)]
@@ -69,6 +69,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Embedded(class: 'Vich\UploaderBundle\Entity\File')]
     private EmbeddedFile $image;
 
+    #[Groups(['post_user'])]
     private ?string $plainPassword = null;
 
     #[ORM\Column(type: Types::BOOLEAN)]

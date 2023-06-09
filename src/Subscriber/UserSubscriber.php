@@ -46,6 +46,12 @@ class UserSubscriber implements EventSubscriberInterface
             ->setName('Default Store')
             ->setUser($user);
 
+        $user->getImage()->setName('kdi02939Idjdk102.png');
+        $user->getImage()->setDimensions(["251","400"]);
+        $user->getImage()->setSize(16000);
+        $user->getImage()->setMimeType('image/png');
+        $user->getImage()->setOriginalName('kdi02939Idjdk102.png');
+
         $user
             ->addStore($store)
             ->setIsEnable(true);

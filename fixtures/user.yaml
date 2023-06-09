@@ -22,4 +22,5 @@ App\Entity\User:
     image.originalName: "kdi02939Idjdk102.png"
     image.mimeType: "image/jpg"
     image.size: "19154"
+    image.dimensions: [ "251", "400" ]
     name: "Jean"

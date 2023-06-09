@@ -51,10 +51,11 @@ security:
   access_control:
     - { path: ^/login, roles: PUBLIC_ACCESS }
     - { path: ^/logout, roles: PUBLIC_ACCESS }
-    #        - { path: ^/admin, roles: ROLE_USER }
-#    - { path: ^/api/docs, roles: PUBLIC_ACCESS }
-#    - { path: ^/api/authenticate, roles: PUBLIC_ACCESS }
-#        - { path: ^/api, roles: ROLE_USER }
+    - { path: ^/admin, roles: ROLE_USER }
+    - { path: ^/api/users, roles: PUBLIC_ACCESS, methods: [POST] }
+    - { path: ^/api/docs, roles: PUBLIC_ACCESS }
+    - { path: ^/api/authenticate, roles: PUBLIC_ACCESS }
+    - { path: ^/api, roles: ROLE_USER }
 
 when@test:
   security:
