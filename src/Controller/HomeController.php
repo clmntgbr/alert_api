@@ -12,8 +12,6 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home')]
     public function index(ProductRepository $productRepository): Response
     {
-        dd($productRepository->findOneBy(['id' => 11]));
-
         return $this->render('Home/index.html.twig', [
         ]);
     }
