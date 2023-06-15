@@ -62,19 +62,19 @@ class Product
     private string $brand;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['get_items', 'get_product'])]
+    #[Groups(['get_product'])]
     private ?string $manufacturingPlace;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['get_items', 'get_product'])]
+    #[Groups(['get_product'])]
     private ?string $link;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['get_items', 'get_product'])]
+    #[Groups(['get_product'])]
     private ?string $origin;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['get_items', 'get_product'])]
+    #[Groups(['get_product'])]
     private ?string $categories;
 
     #[ORM\ManyToOne(targetEntity: ProductNutrition::class, cascade: ['persist', 'remove'], fetch: 'LAZY')]

@@ -19,9 +19,8 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 
 #[ORM\Entity(repositoryClass: ItemRepository::class)]
 #[ApiResource(
-    collectionOperations: ['get', 'post' => ['denormalization_context' => ['groups' => ['post_item']]]],
+    collectionOperations: ['get' => ['skill_null_values' => false, 'normalization_context' => ['groups' => ['get_items']]], 'post' => ['denormalization_context' => ['groups' => ['post_item']]]],
     itemOperations: ['get', 'patch' => ['denormalization_context' => ['groups' => ['patch_item']]], 'delete'],
-    normalizationContext: ['groups' => ['get_items', 'get_product']],
     order: ['expirationDate' => 'ASC'],
 )]
 #[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'product.name' => 'partial'])]
@@ -55,7 +54,6 @@ class Item
     private Product $product;
 
     #[ORM\ManyToOne(targetEntity: Store::class, fetch: 'EAGER', inversedBy: 'items')]
-    #[Groups(['get_items'])]
     private Store $store;
 
     #[ORM\Column(type: Types::JSON, nullable: true)]
@@ -172,6 +170,10 @@ class Item
 
     public function getPreviousStatus(): ?string
     {
+        if (is_null($this->statuses)) {
+            return null;
+        }
+
         if (count($this->statuses) <= 1) {
             return end($this->statuses);
         }
