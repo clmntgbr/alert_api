@@ -46,46 +46,46 @@ class Product
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]
-    #[Groups(['get_items', 'get_product'])]
+    #[Groups(['get_items', 'get_product', 'get_item'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, unique: true)]
-    #[Groups(['get_product', 'post_product'])]
+    #[Groups(['get_product', 'post_product', 'get_item'])]
     private string $ean;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['get_items', 'get_product'])]
+    #[Groups(['get_items', 'get_product', 'get_item'])]
     private string $name;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['get_items', 'get_product'])]
+    #[Groups(['get_items', 'get_product', 'get_item'])]
     private string $brand;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['get_product'])]
+    #[Groups(['get_product', 'get_item'])]
     private ?string $manufacturingPlace;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['get_product'])]
+    #[Groups(['get_product', 'get_item'])]
     private ?string $link;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['get_product'])]
+    #[Groups(['get_product', 'get_item'])]
     private ?string $origin;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups(['get_product'])]
+    #[Groups(['get_product', 'get_item'])]
     private ?string $categories;
 
     #[ORM\ManyToOne(targetEntity: ProductNutrition::class, cascade: ['persist', 'remove'], fetch: 'LAZY')]
-    #[Groups(['get_product'])]
+    #[Groups(['get_product', 'get_item'])]
     private ProductNutrition $productNutrition;
 
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $statuses;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['get_product'])]
+    #[Groups(['get_product', 'get_item'])]
     private ?string $status;
 
     #[ORM\Column(type: Types::JSON, nullable: true)]
@@ -116,19 +116,19 @@ class Product
         $this->imageNutrition = new EmbeddedFile();
     }
 
-    #[Groups(['get_items', 'get_product'])]
+    #[Groups(['get_items', 'get_product', 'get_item'])]
     public function getImagePath(): string
     {
         return sprintf('/images/products/%s', $this->getImage()->getName());
     }
 
-    #[Groups(['get_product'])]
+    #[Groups(['get_product', 'get_item'])]
     public function getImageIngredientsPath(): string
     {
         return sprintf('/images/products/%s', $this->getImageIngredients()->getName());
     }
 
-    #[Groups(['get_product'])]
+    #[Groups(['get_product', 'get_item'])]
     public function getImageNutritionPath(): string
     {
         return sprintf('/images/products/%s', $this->getImageNutrition()->getName());

@@ -20,7 +20,7 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 #[ORM\Entity(repositoryClass: ItemRepository::class)]
 #[ApiResource(
     collectionOperations: ['get' => ['skill_null_values' => false, 'normalization_context' => ['groups' => ['get_items']]], 'post' => ['denormalization_context' => ['groups' => ['post_item']]]],
-    itemOperations: ['get', 'patch' => ['denormalization_context' => ['groups' => ['patch_item']]], 'delete'],
+    itemOperations: ['get' => ['skill_null_values' => false, 'normalization_context' => ['groups' => ['get_item']]], 'patch' => ['denormalization_context' => ['groups' => ['patch_item']]], 'delete'],
     order: ['expirationDate' => 'ASC'],
 )]
 #[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'product.name' => 'partial'])]
@@ -33,24 +33,24 @@ class Item
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: Types::INTEGER)]
-    #[Groups(['get_items'])]
+    #[Groups(['get_items', 'get_item'])]
     private int $id;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     #[Context([DateTimeNormalizer::FORMAT_KEY => 'd/m/Y'])]
-    #[Groups(['get_items', 'patch_item', 'post_item'])]
+    #[Groups(['get_items', 'patch_item', 'post_item', 'get_item'])]
     private ?\DateTimeInterface $expirationDate = null;
 
     #[ORM\Column(type: Types::BOOLEAN)]
-    #[Groups(['get_items', 'patch_item', 'post_item'])]
+    #[Groups(['get_items', 'patch_item', 'post_item', 'get_item'])]
     private bool $isLiked = false;
 
     #[ORM\Column(type: Types::INTEGER)]
-    #[Groups(['get_items', 'patch_item', 'post_item'])]
+    #[Groups(['get_items', 'patch_item', 'post_item', 'get_item'])]
     private int $quantity = 1;
 
     #[ORM\ManyToOne(targetEntity: Product::class, fetch: 'EXTRA_LAZY')]
-    #[Groups(['get_items', 'post_item'])]
+    #[Groups(['get_items', 'post_item', 'get_item'])]
     private Product $product;
 
     #[ORM\ManyToOne(targetEntity: Store::class, fetch: 'EAGER', inversedBy: 'items')]
@@ -60,7 +60,7 @@ class Item
     private ?array $statuses;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['get_items', 'patch_item'])]
+    #[Groups(['get_items', 'patch_item', 'get_item'])]
     private ?string $status;
 
     #[ORM\ManyToMany(targetEntity: Notification::class, mappedBy: 'items')]
