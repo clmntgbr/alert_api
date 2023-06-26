@@ -17,7 +17,7 @@ class PostProductByEan extends AbstractController
     }
 
     /**
-     * @throws \HttpException
+     * @throws \Exception
      */
     public function __invoke(Request $request, Product $data): Product
     {
@@ -28,6 +28,6 @@ class PostProductByEan extends AbstractController
             return $this->productByEanService->find($product->getEan(), $product->getGeography());
         }
 
-        throw new \HttpException('Ean should\'nt be null.', 404);
+        throw new \Exception('Ean should\'nt be null.', 404);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use App\ApiResource\GetBrands;
 use App\ApiResource\PostProductByEan;
 use App\Repository\ProductRepository;
 use Doctrine\DBAL\Types\Types;
@@ -15,7 +16,17 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource(
-    collectionOperations: [],
+    collectionOperations: [
+        'get_brands' => [
+            'method' => 'GET',
+            'path' => '/brands',
+            'controller' => GetBrands::class,
+            'pagination_enabled' => false,
+            'deserialize' => false,
+            'read' => false,
+            'normalization_context' => ['skip_null_values' => false, 'groups' => ['get_brands']],
+        ],
+    ],
     itemOperations: [
         'get' => ['normalization_context' => ['skip_null_values' => false, 'groups' => ['get_product']]],
         'post_products' => [
@@ -25,7 +36,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             'read' => false,
             'normalization_context' => ['skip_null_values' => false, 'groups' => ['get_product']],
             'denormalization_context' => ['skip_null_values' => false, 'groups' => ['post_product']],
-        ],
+        ]
     ],
 )]
 #[Vich\Uploadable]
