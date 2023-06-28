@@ -38,7 +38,7 @@ class OpenFoodFactApiService
     }
 
     /**
-     * @throws \HttpException
+     * @throws \Exception
      */
     public function getOpenFoodFactProductName(array $response): string
     {
@@ -50,7 +50,7 @@ class OpenFoodFactApiService
             return ucwords(strtolower(trim(strip_tags($response['product']['product_name']))));
         }
 
-        throw new \HttpException(404, 'Product not found.');
+        throw new \Exception(404, 'Product not found.');
     }
 
     public function getOpenFoodFactProductOrigin(array $response): ?string

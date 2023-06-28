@@ -9,8 +9,7 @@ use ApiPlatform\Metadata\Operation;
 use App\Entity\Store;
 use App\Entity\User;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\Security\Core\Security;
+use Symfony\Bundle\SecurityBundle\Security;
 
 final class StoreExtension implements QueryCollectionExtensionInterface, QueryItemExtensionInterface
 {
@@ -37,7 +36,7 @@ final class StoreExtension implements QueryCollectionExtensionInterface, QueryIt
 
         $user = $this->security->getToken()?->getUser();
         if (!$user instanceof User) {
-            throw new HttpException(403, 'You have to be authenticated.');
+            throw new \Exception('You have to be authenticated.', 403);
         }
 
         $rootAlias = $queryBuilder->getRootAliases()[0];

@@ -18,13 +18,13 @@ class PostProductByEanService
     }
 
     /**
-     * @throws \HttpException
+     * @throws \Exception
      * @throws JsonException
      */
     public function find(?string $ean, string $geography): Product
     {
         if (null === $ean) {
-            throw new \HttpException('Ean should\'nt be null.', 404);
+            throw new \Exception('Ean should\'nt be null.', 404);
         }
 
         $product = $this->productRepository->findOneBy(['ean' => $ean]);
@@ -53,7 +53,6 @@ class PostProductByEanService
             ->setEcoscoreScore($response['product']['ecoscore_score'] ?? null)
             ->setNutriscoreGrade($response['product']['nutriscore_grade'] ?? null)
             ->setNutriscoreScore($response['product']['nutriscore_score'] ?? null)
-            ->setQuantity($response['product']['quantity'] ?? null)
             ->setIngredientsText($this->openFoodFactApi->getOpenFoodFactProductNutritionIngredients($response));
 
         $product
