@@ -36,7 +36,7 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
             'read' => false,
             'normalization_context' => ['skip_null_values' => false, 'groups' => ['get_product']],
             'denormalization_context' => ['skip_null_values' => false, 'groups' => ['post_product']],
-        ]
+        ],
     ],
 )]
 #[Vich\Uploadable]

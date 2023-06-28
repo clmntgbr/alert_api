@@ -23,7 +23,7 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
     itemOperations: ['get' => ['skill_null_values' => false, 'normalization_context' => ['groups' => ['get_item']]], 'patch' => ['denormalization_context' => ['groups' => ['patch_item']]], 'delete'],
     order: ['expirationDate' => 'ASC'],
 )]
-#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'product.name' => 'partial'])]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'product.name' => 'partial', 'product.brand' => 'exact'])]
 #[ApiFilter(OrderFilter::class, properties: ['expirationDate'])]
 #[ApiFilter(BooleanFilter::class, properties: ['isLiked'])]
 class Item
