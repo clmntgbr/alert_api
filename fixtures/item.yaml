@@ -1,5 +1,5 @@
 App\Entity\Item:
-  item_{1..200}:
+  item_{1..2000}:
     product: "@product_*"
     store: "@store_*"
     isLiked: "<boolean(50)>"
