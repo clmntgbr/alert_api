@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Vich\UploaderBundle\Entity\File as EmbeddedFile;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator\EanConstraint;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource(
@@ -61,10 +63,12 @@ class Product
     private ?int $id = null;
 
     #[ORM\Column(type: Types::STRING, unique: true)]
+    #[EanConstraint(groups: ['strict', 'soft'])]
     #[Groups(['get_product', 'post_product', 'get_item'])]
     private string $ean;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
+    #[Assert\NotBlank(groups: ['soft'])]
     #[Groups(['get_items', 'get_product', 'get_item'])]
     private string $name;
 
@@ -239,7 +243,7 @@ class Product
         return $this->ean;
     }
 
-    public function setEan(string $ean): self
+    public function setEan(?string $ean): self
     {
         $this->ean = $ean;
 

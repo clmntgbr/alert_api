@@ -6,13 +6,17 @@ use App\Entity\Product;
 use App\Entity\ProductNutrition;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Safe\Exceptions\JsonException;
+use Symfony\Component\Validator\Constraints\GroupSequence;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class PostProductByEanService
 {
     public function __construct(
         private readonly ProductRepository $productRepository,
         private readonly OpenFoodFactApiService $openFoodFactApi,
+        private readonly ValidatorInterface $validator,
         private readonly EntityManagerInterface $em
     ) {
     }
@@ -56,7 +60,7 @@ class PostProductByEanService
             ->setIngredientsText($this->openFoodFactApi->getOpenFoodFactProductNutritionIngredients($response));
 
         $product
-            ->setEan($response['code'])
+            ->setEan($response['code'] ?? null)
             ->setLink($this->openFoodFactApi->getOpenFoodFactProductLink($response))
             ->setOrigin($this->openFoodFactApi->getOpenFoodFactProductOrigin($response))
             ->setManufacturingPlace($this->openFoodFactApi->getOpenFoodFactProductManufacturingPlace($response))
@@ -65,6 +69,11 @@ class PostProductByEanService
             ->setCategories($this->openFoodFactApi->getOpenFoodFactProductCategories($response))
             ->setProductNutrition($nutrition)
             ->setStatus(Product::PENDING);
+
+        $errors = $this->validator->validate($product, groups: new GroupSequence(['soft']));
+        if (count($errors) > 0) {
+            throw new Exception((string) $errors);
+        }
 
         $file = $this->openFoodFactApi->getOpenFoodFactProductImage($response['product']['image_url'] ?? null);
         if (null !== $file) {
