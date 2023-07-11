@@ -17,6 +17,7 @@
 
 ###> symfony/webpack-encore-bundle ###
 /node_modules/
+/public/openfoodfacts_test
 /public/build/
 npm-debug.log
 yarn-error.log

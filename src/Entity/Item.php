@@ -19,8 +19,8 @@ use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
 
 #[ORM\Entity(repositoryClass: ItemRepository::class)]
 #[ApiResource(
-    collectionOperations: ['get' => ['skill_null_values' => false, 'normalization_context' => ['groups' => ['get_items']]], 'post' => ['denormalization_context' => ['groups' => ['post_item']]]],
-    itemOperations: ['get' => ['skill_null_values' => false, 'normalization_context' => ['groups' => ['get_item']]], 'patch' => ['denormalization_context' => ['groups' => ['patch_item']]], 'delete'],
+    collectionOperations: ['get' => ['normalization_context' => ['skill_null_values' => false, 'groups' => ['get_items']]], 'post' => ['denormalization_context' => ['groups' => ['post_item']]]],
+    itemOperations: ['get' => ['normalization_context' => ['skip_null_values' => false, 'groups' => ['get_item', 'get_items', 'get_product']]], 'patch' => ['denormalization_context' => ['groups' => ['patch_item']]], 'delete'],
     order: ['expirationDate' => 'ASC'],
 )]
 #[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'product.name' => 'partial', 'product.brand' => 'exact'])]

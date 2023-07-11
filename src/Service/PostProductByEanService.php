@@ -57,16 +57,16 @@ class PostProductByEanService
             ->setEcoscoreScore($response['product']['ecoscore_score'] ?? null)
             ->setNutriscoreGrade($response['product']['nutriscore_grade'] ?? null)
             ->setNutriscoreScore($response['product']['nutriscore_score'] ?? null)
-            ->setIngredientsText($this->openFoodFactApi->getOpenFoodFactProductNutritionIngredients($response));
+            ->setIngredientsText($this->openFoodFactApi->getOpenFoodFactProductNutritionIngredients($response['product']));
 
         $product
             ->setEan($response['code'] ?? null)
-            ->setLink($this->openFoodFactApi->getOpenFoodFactProductLink($response))
-            ->setOrigin($this->openFoodFactApi->getOpenFoodFactProductOrigin($response))
-            ->setManufacturingPlace($this->openFoodFactApi->getOpenFoodFactProductManufacturingPlace($response))
-            ->setName($this->openFoodFactApi->getOpenFoodFactProductName($response))
+            ->setLink($this->openFoodFactApi->getOpenFoodFactProductLink($response['product']))
+            ->setOrigin($this->openFoodFactApi->getOpenFoodFactProductOrigin($response['product']))
+            ->setManufacturingPlace($this->openFoodFactApi->getOpenFoodFactProductManufacturingPlace($response['product']))
+            ->setName($this->openFoodFactApi->getOpenFoodFactProductName($response['product']))
             ->setBrand($response['product']['brands'])
-            ->setCategories($this->openFoodFactApi->getOpenFoodFactProductCategories($response))
+            ->setCategories($this->openFoodFactApi->getOpenFoodFactProductCategories($response['product']))
             ->setProductNutrition($nutrition)
             ->setStatus(Product::PENDING);
 

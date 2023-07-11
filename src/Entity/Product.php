@@ -30,7 +30,9 @@ use App\Validator\EanConstraint;
         ],
     ],
     itemOperations: [
-        'get' => ['normalization_context' => ['skip_null_values' => false, 'groups' => ['get_product']]],
+        'get' => [
+            'normalization_context' => ['skip_null_values' => false, 'groups' => ['get_product']]
+        ],
         'post_products' => [
             'method' => 'POST',
             'path' => '/products',
@@ -77,7 +79,7 @@ class Product
     private string $brand;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
-    #[Groups(['get_product', 'get_item'])]
+    #[Groups(['get_items', 'get_product', 'get_item'])]
     private ?string $manufacturingPlace;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]

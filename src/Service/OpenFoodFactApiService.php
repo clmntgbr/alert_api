@@ -26,12 +26,12 @@ class OpenFoodFactApiService
 
     public function getOpenFoodFactProductCategories(array $response): ?string
     {
-        if (array_key_exists('categories', $response['product'])) {
-            return $response['product']['categories'];
+        if (array_key_exists('categories', $response)) {
+            return $response['categories'];
         }
 
-        if (array_key_exists('categories_old', $response['product'])) {
-            return $response['product']['categories_old'];
+        if (array_key_exists('categories_old', $response)) {
+            return $response['categories_old'];
         }
 
         return null;
@@ -42,12 +42,12 @@ class OpenFoodFactApiService
      */
     public function getOpenFoodFactProductName(array $response): string
     {
-        if (array_key_exists('product_name_fr', $response['product']) && '' !== $response['product']['product_name_fr']) {
-            return ucwords(strtolower(trim(strip_tags($response['product']['product_name_fr']))));
+        if (array_key_exists('product_name_fr', $response) && '' !== $response['product_name_fr']) {
+            return ucwords(strtolower(trim(strip_tags($response['product_name_fr']))));
         }
 
-        if (array_key_exists('product_name', $response['product']) && '' !== $response['product']['product_name']) {
-            return ucwords(strtolower(trim(strip_tags($response['product']['product_name']))));
+        if (array_key_exists('product_name', $response) && '' !== $response['product_name']) {
+            return ucwords(strtolower(trim(strip_tags($response['product_name']))));
         }
 
         throw new \Exception(404, 'Product not found.');
@@ -55,12 +55,12 @@ class OpenFoodFactApiService
 
     public function getOpenFoodFactProductOrigin(array $response): ?string
     {
-        if (array_key_exists('origin_fr', $response['product']) && '' !== $response['product']['origin_fr']) {
-            return ucwords(strtolower(trim(strip_tags($response['product']['origin_fr']))));
+        if (array_key_exists('origin_fr', $response) && '' !== $response['origin_fr']) {
+            return ucwords(strtolower(trim(strip_tags($response['origin_fr']))));
         }
 
-        if (array_key_exists('origins', $response['product']) && '' !== $response['product']['origins']) {
-            return ucwords(strtolower(trim(strip_tags($response['product']['origins']))));
+        if (array_key_exists('origins', $response) && '' !== $response['origins']) {
+            return ucwords(strtolower(trim(strip_tags($response['origins']))));
         }
 
         return null;
@@ -68,20 +68,20 @@ class OpenFoodFactApiService
 
     public function getOpenFoodFactProductNutritionIngredients(array $response): ?string
     {
-        if (array_key_exists('ingredients_text_with_allergens_fr', $response['product']) && '' !== $response['product']['ingredients_text_with_allergens_fr']) {
-            return ucwords(strtolower(trim(strip_tags($response['product']['ingredients_text_with_allergens_fr']))));
+        if (array_key_exists('ingredients_text_with_allergens_fr', $response) && '' !== $response['ingredients_text_with_allergens_fr']) {
+            return ucwords(strtolower(trim(strip_tags($response['ingredients_text_with_allergens_fr']))));
         }
 
-        if (array_key_exists('ingredients_text_with_allergens', $response['product']) && '' !== $response['product']['ingredients_text_with_allergens']) {
-            return ucwords(strtolower(trim(strip_tags($response['product']['ingredients_text_with_allergens']))));
+        if (array_key_exists('ingredients_text_with_allergens', $response) && '' !== $response['ingredients_text_with_allergens']) {
+            return ucwords(strtolower(trim(strip_tags($response['ingredients_text_with_allergens']))));
         }
 
-        if (array_key_exists('ingredients_text_fr', $response['product']) && '' !== $response['product']['ingredients_text_fr']) {
-            return ucwords(strtolower(trim(strip_tags($response['product']['ingredients_text_fr']))));
+        if (array_key_exists('ingredients_text_fr', $response) && '' !== $response['ingredients_text_fr']) {
+            return ucwords(strtolower(trim(strip_tags($response['ingredients_text_fr']))));
         }
 
-        if (array_key_exists('ingredients_text', $response['product']) && '' !== $response['product']['ingredients_text']) {
-            return ucwords(strtolower(trim(strip_tags($response['product']['ingredients_text']))));
+        if (array_key_exists('ingredients_text', $response) && '' !== $response['ingredients_text']) {
+            return ucwords(strtolower(trim(strip_tags($response['ingredients_text']))));
         }
 
         return null;
@@ -89,17 +89,17 @@ class OpenFoodFactApiService
 
     public function getOpenFoodFactProductLink(array $response): ?string
     {
-        if (array_key_exists('link', $response['product']) && '' !== $response['product']['link']) {
-            return $response['product']['link'];
+        if (array_key_exists('link', $response) && '' !== $response['link']) {
+            return $response['link'];
         }
 
         return null;
     }
 
-    public function getOpenFoodFactProductManufacturingPlace(array $response): ?string
+    public function getOpenFoodFactProductManufacturingPlace(array $response, string $key = 'manufacturing_places'): ?string
     {
-        if (array_key_exists('manufacturing_places', $response['product']) && '' !== $response['product']['manufacturing_places']) {
-            return $response['product']['manufacturing_places'];
+        if (array_key_exists($key, $response) && '' !== $response[$key]) {
+            return $response[$key];
         }
 
         return null;
