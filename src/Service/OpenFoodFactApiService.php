@@ -58,7 +58,7 @@ class OpenFoodFactApiService
             return ucwords(strtolower(trim(strip_tags($response['product_name_en_imported']))));
         }
 
-        throw new \Exception('Product not found.', 404);
+        throw new \Exception(sprintf('Product not found with EAN (%s)', $response['code'] ?? 'N/A'), 404);
     }
 
     public function getOpenFoodFactProductOrigin(array $response): ?string
