@@ -6,7 +6,6 @@ use App\Entity\Product;
 use App\Entity\ProductNutrition;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
 use Safe\Exceptions\JsonException;
 use Symfony\Component\Validator\Constraints\GroupSequence;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -39,6 +38,7 @@ class PostProductByEanService
             $this->getProductNutrition($response, $product->getProductNutrition());
             $this->em->persist($product);
             $this->em->flush();
+
             return $product;
         }
 
@@ -81,7 +81,7 @@ class PostProductByEanService
 
         $errors = $this->validator->validate($product, groups: new GroupSequence(['soft']));
         if (count($errors) > 0) {
-            throw new Exception((string) $errors, 404);
+            throw new \Exception((string) $errors, 404);
         }
 
         $file = $this->openFoodFactApi->getOpenFoodFactProductImage($response['product']['image_url'] ?? null);

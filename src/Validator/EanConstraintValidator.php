@@ -15,10 +15,11 @@ class EanConstraintValidator extends ConstraintValidator
             throw new UnexpectedTypeException($constraint, EanConstraint::class);
         }
 
-        if (!preg_match("/^[0-9]{13}$/", $value)) {
+        if (!preg_match('/^[0-9]{13}$/', $value)) {
             $this->context
                 ->buildViolation($constraint->message)
                 ->addViolation();
+
             return;
         }
 
@@ -32,9 +33,8 @@ class EanConstraintValidator extends ConstraintValidator
 
         $total_sum = $even_sum_three + $odd_sum;
 
-        $next_ten = (ceil($total_sum / 10)) * 10;
+        $next_ten = ceil($total_sum / 10) * 10;
         $check_digit = $next_ten - $total_sum;
-
 
         if ($check_digit == $digits[12]) {
             return;

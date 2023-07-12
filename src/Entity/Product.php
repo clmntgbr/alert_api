@@ -6,15 +6,15 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\ApiResource\GetBrands;
 use App\ApiResource\PostProductByEan;
 use App\Repository\ProductRepository;
+use App\Validator\EanConstraint;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Timestampable\Traits\TimestampableEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Entity\File as EmbeddedFile;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
-use Symfony\Component\Validator\Constraints as Assert;
-use App\Validator\EanConstraint;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource(
@@ -31,7 +31,7 @@ use App\Validator\EanConstraint;
     ],
     itemOperations: [
         'get' => [
-            'normalization_context' => ['skip_null_values' => false, 'groups' => ['get_product']]
+            'normalization_context' => ['skip_null_values' => false, 'groups' => ['get_product']],
         ],
         'post_products' => [
             'method' => 'POST',

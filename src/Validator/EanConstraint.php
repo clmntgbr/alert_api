@@ -21,6 +21,6 @@ class EanConstraint extends Constraint
 
     public function validatedBy()
     {
-        return static::class . 'Validator';
+        return static::class.'Validator';
     }
 }

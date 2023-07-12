@@ -2,25 +2,19 @@
 
 namespace App\Command;
 
-use App\Entity\Item;
-use App\Entity\Notification;
 use App\Entity\Product;
-use App\Entity\ProductNutrition;
-use App\Entity\User;
-use App\Entity\UserNotificationTimer;
-use App\Repository\ItemRepository;
+use App\Message\CreateProductMessage;
 use App\Repository\ProductRepository;
 use App\Repository\UserNotificationTimerRepository;
 use App\Service\OpenFoodFactApiService;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
-use Hautelook\AliceBundle\Functional\TestBundle\Entity\Prod;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Validator\Constraints\GroupSequence;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[AsCommand(
@@ -35,6 +29,7 @@ class CreateProductsCommand extends Command
         private readonly EntityManagerInterface $em,
         private readonly ValidatorInterface $validator,
         private readonly OpenFoodFactApiService $openFoodFactApiService,
+        private readonly MessageBusInterface $messageBus,
         string $name = null
     ) {
         parent::__construct($name);
@@ -49,11 +44,9 @@ class CreateProductsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $io = new SymfonyStyle($input, $output);
-
         $files = scandir(sprintf('%s/../../public/openfoodfacts_test', __DIR__), SCANDIR_SORT_ASCENDING);
 
-        if ($files === false) {
+        if (false === $files) {
             return Command::FAILURE;
         }
 
@@ -62,26 +55,22 @@ class CreateProductsCommand extends Command
         unset($flipped['..']);
         unset($flipped['.DS_Store']);
 
-        $io->createProgressBar(count($flipped));
-        $io->progressStart();
+        $progressBar = new ProgressBar($output, count($flipped));
+        $progressBar->setFormat('verbose');
 
         foreach ($flipped as $key => $value) {
-            $fn = fopen(sprintf('%s/../../public/openfoodfacts_test/%s', __DIR__, $key), "r");
+            $fn = fopen(sprintf('%s/../../public/openfoodfacts_test/%s', __DIR__, $key), 'r');
+            $progressBar->advance();
 
             while (!feof($fn)) {
                 $result = json_decode(fgets($fn), true);
-                try {
-                    $this->createProduct($result);
-                } catch (Exception $e) {
-                    continue;
-                }
+                $this->createProduct($result ?? []);
             }
 
             fclose($fn);
-            $io->progressAdvance();
         }
 
-        $io->progressFinish();
+        $progressBar->finish();
 
         return Command::SUCCESS;
     }
@@ -93,38 +82,10 @@ class CreateProductsCommand extends Command
             return;
         }
 
-        $product = new Product();
-        $product
-            ->setEan($result['code'] ?? '')
-            ->setName($this->openFoodFactApiService->getOpenFoodFactProductName($result));
+        $this->messageBus->dispatch(
+            new CreateProductMessage($result['code'] ?? 'unknown', $result)
+        );
 
-        $errors = $this->validator->validate($product, groups: new GroupSequence(['soft']));
-        if (count($errors) > 0) {
-            return;
-        }
-
-        $nutrition = new ProductNutrition();
-
-        $nutrition
-            ->setEcoscoreGrade($result['ecoscore_grade'] ?? null)
-            ->setEcoscoreScore($result['ecoscore_score'] ?? null)
-            ->setNutriscoreGrade($result['nutriscore_grade'] ?? null)
-            ->setIngredientsText($this->openFoodFactApiService->getOpenFoodFactProductNutritionIngredients($result))
-            ->setNutriscoreScore($result['nutriscore_score'] ?? null);
-
-        $product
-            ->setBrand($result['brands'] ?? null)
-            ->setProductNutrition($nutrition)
-            ->setLink($this->openFoodFactApiService->getOpenFoodFactProductLink($result))
-            ->setOrigin($this->openFoodFactApiService->getOpenFoodFactProductOrigin($result))
-            ->setManufacturingPlace($this->openFoodFactApiService->getOpenFoodFactProductManufacturingPlace($result, 'manufacturing_places'))
-            ->setName($this->openFoodFactApiService->getOpenFoodFactProductName($result))
-            ->setCategories($this->openFoodFactApiService->getOpenFoodFactProductCategories($result))
-            ->setStatus(Product::PENDING);
-
-        $this->em->persist($product);
-        $this->em->flush();
-
-        return $product;
+        return;
     }
 }
