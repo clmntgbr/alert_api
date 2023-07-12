@@ -50,7 +50,15 @@ class OpenFoodFactApiService
             return ucwords(strtolower(trim(strip_tags($response['product_name']))));
         }
 
-        throw new \Exception(404, 'Product not found.');
+        if (array_key_exists('product_name_en', $response) && '' !== $response['product_name_en']) {
+            return ucwords(strtolower(trim(strip_tags($response['product_name_en']))));
+        }
+
+        if (array_key_exists('product_name_en_imported', $response) && '' !== $response['product_name_en_imported']) {
+            return ucwords(strtolower(trim(strip_tags($response['product_name_en_imported']))));
+        }
+
+        throw new \Exception('Product not found.', 404);
     }
 
     public function getOpenFoodFactProductOrigin(array $response): ?string
@@ -82,6 +90,14 @@ class OpenFoodFactApiService
 
         if (array_key_exists('ingredients_text', $response) && '' !== $response['ingredients_text']) {
             return ucwords(strtolower(trim(strip_tags($response['ingredients_text']))));
+        }
+
+        if (array_key_exists('ingredients_text_en', $response) && '' !== $response['ingredients_text_en']) {
+            return ucwords(strtolower(trim(strip_tags($response['ingredients_text_en']))));
+        }
+
+        if (array_key_exists('ingredients_text_en_imported', $response) && '' !== $response['ingredients_text_en_imported']) {
+            return ucwords(strtolower(trim(strip_tags($response['ingredients_text_en_imported']))));
         }
 
         return null;

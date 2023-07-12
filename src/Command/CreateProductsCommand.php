@@ -13,6 +13,7 @@ use App\Repository\ProductRepository;
 use App\Repository\UserNotificationTimerRepository;
 use App\Service\OpenFoodFactApiService;
 use Doctrine\ORM\EntityManagerInterface;
+use Exception;
 use Hautelook\AliceBundle\Functional\TestBundle\Entity\Prod;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -48,6 +49,8 @@ class CreateProductsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $io = new SymfonyStyle($input, $output);
+
         $files = scandir(sprintf('%s/../../public/openfoodfacts_test', __DIR__), SCANDIR_SORT_ASCENDING);
 
         if ($files === false) {
@@ -59,16 +62,26 @@ class CreateProductsCommand extends Command
         unset($flipped['..']);
         unset($flipped['.DS_Store']);
 
+        $io->createProgressBar(count($flipped));
+        $io->progressStart();
+
         foreach ($flipped as $key => $value) {
             $fn = fopen(sprintf('%s/../../public/openfoodfacts_test/%s', __DIR__, $key), "r");
 
             while (!feof($fn)) {
                 $result = json_decode(fgets($fn), true);
-                $this->createProduct($result);
+                try {
+                    $this->createProduct($result);
+                } catch (Exception $e) {
+                    continue;
+                }
             }
 
             fclose($fn);
+            $io->progressAdvance();
         }
+
+        $io->progressFinish();
 
         return Command::SUCCESS;
     }
@@ -100,19 +113,17 @@ class CreateProductsCommand extends Command
             ->setNutriscoreScore($result['nutriscore_score'] ?? null);
 
         $product
-            ->setBrand($result['brands'])
+            ->setBrand($result['brands'] ?? null)
             ->setProductNutrition($nutrition)
             ->setLink($this->openFoodFactApiService->getOpenFoodFactProductLink($result))
             ->setOrigin($this->openFoodFactApiService->getOpenFoodFactProductOrigin($result))
-            ->setManufacturingPlace($this->openFoodFactApiService->getOpenFoodFactProductManufacturingPlace($result, 'countries'))
+            ->setManufacturingPlace($this->openFoodFactApiService->getOpenFoodFactProductManufacturingPlace($result, 'manufacturing_places'))
             ->setName($this->openFoodFactApiService->getOpenFoodFactProductName($result))
             ->setCategories($this->openFoodFactApiService->getOpenFoodFactProductCategories($result))
             ->setStatus(Product::PENDING);
 
-        dd($product);
-
-        // $this->em->persist($product);
-        // $this->em->flush();
+        $this->em->persist($product);
+        $this->em->flush();
 
         return $product;
     }

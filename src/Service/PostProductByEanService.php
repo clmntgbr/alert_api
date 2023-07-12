@@ -33,25 +33,28 @@ class PostProductByEanService
 
         $product = $this->productRepository->findOneBy(['ean' => $ean]);
 
+        $response = $this->openFoodFactApi->getProduct($ean, $geography);
+
         if ($product instanceof Product) {
+            $this->getProductNutrition($response, $product->getProductNutrition());
+            $this->em->persist($product);
+            $this->em->flush();
             return $product;
         }
 
-        $response = $this->openFoodFactApi->getProduct($ean, $geography);
         $product = new Product();
+        $product->setEan($ean);
         $product->setResponse($response);
 
         if (isset($response['status_verbose']) && in_array($response['status_verbose'], ['no code or invalid code', 'product not found'])) {
-            return $this->createUnfoundedProduct($ean, $product);
+            return $this->createUnfoundedProduct($product);
         }
 
         return $this->createFoundedProduct($response, $product);
     }
 
-    private function createFoundedProduct(array $response, Product $product): Product
+    private function getProductNutrition(array $response, ProductNutrition $nutrition): ProductNutrition
     {
-        $nutrition = new ProductNutrition();
-
         $nutrition
             ->setEcoscoreGrade($response['product']['ecoscore_grade'] ?? null)
             ->setEcoscoreScore($response['product']['ecoscore_score'] ?? null)
@@ -59,8 +62,14 @@ class PostProductByEanService
             ->setNutriscoreScore($response['product']['nutriscore_score'] ?? null)
             ->setIngredientsText($this->openFoodFactApi->getOpenFoodFactProductNutritionIngredients($response['product']));
 
+        return $nutrition;
+    }
+
+    private function createFoundedProduct(array $response, Product $product): Product
+    {
+        $nutrition = $this->getProductNutrition($response, new ProductNutrition());
+
         $product
-            ->setEan($response['code'] ?? null)
             ->setLink($this->openFoodFactApi->getOpenFoodFactProductLink($response['product']))
             ->setOrigin($this->openFoodFactApi->getOpenFoodFactProductOrigin($response['product']))
             ->setManufacturingPlace($this->openFoodFactApi->getOpenFoodFactProductManufacturingPlace($response['product']))
@@ -72,7 +81,7 @@ class PostProductByEanService
 
         $errors = $this->validator->validate($product, groups: new GroupSequence(['soft']));
         if (count($errors) > 0) {
-            throw new Exception((string) $errors);
+            throw new Exception((string) $errors, 404);
         }
 
         $file = $this->openFoodFactApi->getOpenFoodFactProductImage($response['product']['image_url'] ?? null);
@@ -96,10 +105,9 @@ class PostProductByEanService
         return $product;
     }
 
-    private function createUnfoundedProduct(string $ean, Product $product): Product
+    private function createUnfoundedProduct(Product $product): Product
     {
         $product
-            ->setEan($ean)
             ->setProductNutrition(new ProductNutrition())
             ->setStatus(Product::NOT_FOUND);
 

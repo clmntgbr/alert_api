@@ -35,6 +35,7 @@ class EanConstraintValidator extends ConstraintValidator
         $next_ten = (ceil($total_sum / 10)) * 10;
         $check_digit = $next_ten - $total_sum;
 
+
         if ($check_digit == $digits[12]) {
             return;
         }
@@ -42,6 +43,5 @@ class EanConstraintValidator extends ConstraintValidator
         $this->context
             ->buildViolation($constraint->message)
             ->addViolation();
-        return;
     }
 }

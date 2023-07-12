@@ -76,7 +76,7 @@ class Product
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
     #[Groups(['get_items', 'get_product', 'get_item'])]
-    private string $brand;
+    private ?string $brand;
 
     #[ORM\Column(type: Types::STRING, nullable: true)]
     #[Groups(['get_items', 'get_product', 'get_item'])]
