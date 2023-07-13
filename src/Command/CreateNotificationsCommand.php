@@ -7,6 +7,7 @@ use App\Entity\Notification;
 use App\Entity\User;
 use App\Entity\UserNotificationTimer;
 use App\Repository\ItemRepository;
+use App\Repository\NotificationRepository;
 use App\Repository\UserNotificationTimerRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -24,7 +25,7 @@ class CreateNotificationsCommand extends Command
     public function __construct(
         private readonly UserNotificationTimerRepository $userNotificationTimerRepository,
         private readonly ItemRepository $itemRepository,
-        private readonly EntityManagerInterface $em,
+        private readonly NotificationRepository $notificationRepository,
         string $name = null
     ) {
         parent::__construct($name);
@@ -61,8 +62,7 @@ class CreateNotificationsCommand extends Command
                 continue;
             }
 
-            $this->em->persist($notification);
-            $this->em->flush();
+            $this->notificationRepository->save($notification, true);
         }
 
         return Command::SUCCESS;
