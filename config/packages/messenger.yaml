@@ -64,4 +64,3 @@ framework:
                     max_delay: 0
 
         routing:
-            App\Message\CreateProductMessage: async_priority_high

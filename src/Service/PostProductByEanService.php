@@ -5,7 +5,6 @@ namespace App\Service;
 use App\Entity\Product;
 use App\Entity\ProductNutrition;
 use App\Repository\ProductRepository;
-use Doctrine\ORM\EntityManagerInterface;
 use Safe\Exceptions\JsonException;
 use Symfony\Component\Validator\Constraints\GroupSequence;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -15,8 +14,7 @@ class PostProductByEanService
     public function __construct(
         private readonly ProductRepository $productRepository,
         private readonly OpenFoodFactApiService $openFoodFactApi,
-        private readonly ValidatorInterface $validator,
-        private readonly EntityManagerInterface $em
+        private readonly ValidatorInterface $validator
     ) {
     }
 
@@ -31,16 +29,12 @@ class PostProductByEanService
         }
 
         $product = $this->productRepository->findOneBy(['ean' => $ean]);
+        if ($product instanceof Product) {
+            return $product;
+        }
 
         $response = $this->openFoodFactApi->getProduct($ean, $geography);
 
-        if ($product instanceof Product) {
-            $this->getProductNutrition($response, $product->getProductNutrition());
-            $this->em->persist($product);
-            $this->em->flush();
-
-            return $product;
-        }
 
         $product = new Product();
         $product->setEan($ean);
@@ -98,9 +92,8 @@ class PostProductByEanService
         if (null !== $file) {
             $product->setImageNutrition($file);
         }
-
-        $this->em->persist($product);
-        $this->em->flush();
+        
+        $this->productRepository->save($product, true);
 
         return $product;
     }
@@ -111,8 +104,7 @@ class PostProductByEanService
             ->setProductNutrition(new ProductNutrition())
             ->setStatus(Product::NOT_FOUND);
 
-        $this->em->persist($product);
-        $this->em->flush();
+        $this->productRepository->save($product, true);
 
         return $product;
     }
