@@ -29,6 +29,11 @@ class UserNotificationTimer
     #[ORM\ManyToOne(targetEntity: User::class, fetch: 'EAGER', inversedBy: 'userNotificationTimers')]
     private User $user;
 
+    public function __toString()
+    {
+        return (string) $this->id;
+    }
+
     public function getId(): ?int
     {
         return $this->id;

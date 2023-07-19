@@ -59,6 +59,11 @@ class Notification
         $this->items = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return (string) $this->id;
+    }
+
     public function getStatus(): string
     {
         return $this->status;

@@ -71,6 +71,11 @@ class Item
         $this->notifications = new ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return sprintf('itemId: %s, productId: %s', $this->id, $this->product->getId());
+    }
+
     public function getId(): ?int
     {
         return $this->id;

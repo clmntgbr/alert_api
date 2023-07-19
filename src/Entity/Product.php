@@ -133,6 +133,11 @@ class Product
         $this->imageNutrition = new EmbeddedFile();
     }
 
+    public function __toString()
+    {
+        return sprintf('productId: %s, productName: %s, ', $this->id, $this->getName());
+    }
+
     #[Groups(['get_items', 'get_product', 'get_item'])]
     public function getImagePath(): string
     {
